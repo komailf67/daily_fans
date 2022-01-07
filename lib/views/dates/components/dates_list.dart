@@ -10,10 +10,6 @@ class DatesList extends GetView<DatesController> {
 
   @override
   Widget build(BuildContext context) {
-    var a = [
-      {'i': 2, 'i2': 3},
-      {'i': 2, 'i2': 3}
-    ];
     // for (var key in controller.prices[0]['items'].keys) {
     //   print(key);
     //   print(controller.prices[0]['items'][key]);
@@ -26,23 +22,20 @@ class DatesList extends GetView<DatesController> {
     List<Widget> renderSingleCollapse() {
       List<Widget> gameCells = <Widget>[];
       for (var key in controller.prices[0]['items'].keys) {
-        gameCells.add(
-          Card(
+        gameCells.add(Padding(
+          padding: EdgeInsets.only(left: 10, right: 10),
+          child: Card(
             child: ListTile(
               // onTap: () => _showListInModal(),
               leading: Text(
                 key.toString(),
-                // style: const TextStyle(
-                //     color: Colors.red, fontSize: 16),
               ),
               trailing: Text(
                 controller.prices[0]['items'][key].toString(),
-                // style: const TextStyle(
-                //     color: Colors.red, fontSize: 16),
               ),
             ),
           ),
-        );
+        ));
       }
       ;
       return gameCells;
@@ -73,8 +66,9 @@ class DatesList extends GetView<DatesController> {
                     LimitedBox(
                       child: SvgPicture.asset(
                         'lib/assets/svg/avaLogo.svg',
-                        width: 52.5,
-                        height: 48,
+                        width: 50,
+                        height: 50,
+                        color: Theme.of(context).primaryColor,
                       ),
                       maxHeight: 100,
                       maxWidth: 100,
@@ -195,14 +189,14 @@ class DatesList extends GetView<DatesController> {
                               title: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                children: const [
+                                children: [
                                   Text(
-                                    'list.name',
+                                    user.value['date'].toString(),
                                     // style: TextStyle(
                                     //     color: Colors.red, fontSize: 16),
                                   ),
                                   Text(
-                                    'list.name',
+                                    user.value['title'].toString(),
                                     // style: TextStyle(
                                     //     color: Colors.red, fontSize: 16),
                                   )

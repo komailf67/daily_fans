@@ -16,28 +16,35 @@ class DatesView extends GetView {
               LimitedBox(
                 child: SvgPicture.asset(
                   'lib/assets/svg/avaLogo.svg',
-                  width: 52.5,
-                  height: 48,
+                  width: 50,
+                  height: 50,
+                  color: Theme.of(context).primaryColor,
                 ),
                 maxHeight: 100,
                 maxWidth: 100,
               ),
               const SizedBox(
-                height: 24,
+                height: 15,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
                     icon: const Icon(Icons.sort),
-                    color: Colors.red,
+                    color: Theme.of(context).primaryColor,
                     onPressed: () {},
+                    iconSize: 30,
                   ),
                   IconButton(
                     icon: const Icon(Icons.add),
-                    color: Colors.red,
+                    color: Theme.of(context).primaryColor,
                     onPressed: () {},
+                    iconSize: 30,
                   ),
                 ],
+              ),
+              const SizedBox(
+                height: 15,
               ),
               const DatesList(),
             ],

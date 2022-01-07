@@ -6,8 +6,8 @@ class Themes {
       ThemeData.light().copyWith(
         // scaffoldBackgroundColor: Colors.white,
         colorScheme: const ColorScheme.light(
-          primary: Color(0XFFE6007E),
-          secondary: Color(0XFF0B7B99),
+          primary: Colors.blue,
+          secondary: Color(0XFFE6007E),
           error: Color(0XFFDC2626),
         ),
         textTheme: const TextTheme(
@@ -30,7 +30,7 @@ class Themes {
             fontSize: 24,
           ),
           subtitle1: TextStyle(
-            fontSize: 20,
+            fontSize: 18,
           ),
           headline6: TextStyle(
             fontSize: 36,

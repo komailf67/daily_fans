@@ -24,8 +24,9 @@ class LoginForm extends GetView<LoginController> {
                 LimitedBox(
                   child: SvgPicture.asset(
                     'lib/assets/svg/avaLogo.svg',
-                    width: 52.5,
-                    height: 48,
+                    width: 50,
+                    height: 50,
+                    color: Colors.blue,
                   ),
                   maxHeight: 100,
                   maxWidth: 100,
@@ -42,7 +43,7 @@ class LoginForm extends GetView<LoginController> {
                   ),
                 ),
                 const SizedBox(
-                  height: 50,
+                  height: 70,
                 ),
                 SizedBox(
                   width: double.infinity,
@@ -87,7 +88,7 @@ class LoginForm extends GetView<LoginController> {
                   ),
                 ),
                 const SizedBox(
-                  height: 100,
+                  height: 70,
                 ),
                 // Row(
                 //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -129,8 +130,7 @@ class LoginForm extends GetView<LoginController> {
                         //     !controller.formKey.currentState!.validate())
                         //   return;
                         // await controller.login();
-                        // Get.to(const DatesView());
-                        Get.to(() => const DatesView());
+                        Get.toNamed(DatesView.route());
                       },
                       child: Obx(
                         () => controller.loading.value

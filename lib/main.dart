@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       // darkTheme: Themes.lightTheme(context),
       theme: Themes.lightTheme(context),
       themeMode: ThemeMode.light,
-      initialRoute: DatesView.route(),
+      initialRoute: LoginView.route(),
       initialBinding: InitialBinding(),
       getPages: [
         GetPage(
