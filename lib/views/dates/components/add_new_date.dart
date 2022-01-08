@@ -37,11 +37,14 @@ class AddNewDate extends GetView<DatesController> {
     }
 
     return SizedBox(
-      child: IconButton(
-        icon: const Icon(Icons.add),
-        color: Theme.of(context).primaryColor,
+      child: FloatingActionButton(
         onPressed: () => showAddNewDateModal(),
-        iconSize: 30,
+        backgroundColor: Theme.of(context).primaryColor,
+        child: const Icon(
+          Icons.add,
+          size: 30,
+          color: Colors.white,
+        ),
       ),
     );
   }

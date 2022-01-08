@@ -227,12 +227,9 @@ class DatesController extends GetxController {
     },
   ].obs;
 
-  // var dates = [
-  //   {'date': '1400/3/4', 'title': 'ali'},
-  //   {'date': '1400/3/5', 'title': 'reza'},
-  //   {'date': '1400/3/6', 'title': 'mohammad'},
-  //   {'date': '1400/3/7', 'title': 'saeid'},
-  //   {'date': '1400/3/8', 'title': 'mehdi'},
-  //   {'date': '1400/3/9', 'title': 'hasan'},
-  // ].obs;
+  var descending = true.obs;
+
+  void changeSortDates() {
+    descending.value = !descending.value;
+  }
 }

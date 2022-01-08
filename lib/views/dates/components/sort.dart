@@ -7,21 +7,21 @@ class Sort extends GetView<DatesController> {
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton(
-      icon: Icon(
-        Icons.sort,
-        color: Theme.of(context).primaryColor,
-      ),
-      itemBuilder: (context) => const [
-        PopupMenuItem(
-          child: Text("First"),
-          value: 1,
+    return Obx(
+      () => Container(
+        margin: EdgeInsets.only(left: 5),
+        child: IconButton(
+          icon: Icon(
+            controller.descending.isTrue
+                ? Icons.arrow_downward
+                : Icons.arrow_upward,
+            color: Theme.of(context).primaryColor,
+          ),
+          color: Theme.of(context).primaryColor,
+          onPressed: () => controller.changeSortDates(),
+          iconSize: 30,
         ),
-        PopupMenuItem(
-          child: Text("Second"),
-          value: 2,
-        )
-      ],
+      ),
     );
   }
 }

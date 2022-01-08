@@ -10,15 +10,6 @@ class DatesList extends GetView<DatesController> {
 
   @override
   Widget build(BuildContext context) {
-    // for (var key in controller.prices[0]['items'].keys) {
-    //   print(key);
-    //   print(controller.prices[0]['items'][key]);
-    // }
-    // controller.prices.asMap().entries.map((item) {
-    //   return print(item.key);
-    // });
-    // print(jsonEncode({'object': 1}));
-    // print(controller.prices[0]['items'].length);
     List<Widget> renderSingleCollapse() {
       List<Widget> gameCells = <Widget>[];
       for (var key in controller.prices[0]['items'].keys) {
@@ -59,7 +50,7 @@ class DatesList extends GetView<DatesController> {
                 child: ListView(
                   children: [
                     const SizedBox(
-                      height: 10,
+                      height: 30,
                     ),
                     LimitedBox(
                       child: SvgPicture.asset(
@@ -74,91 +65,39 @@ class DatesList extends GetView<DatesController> {
                     const SizedBox(
                       height: 24,
                     ),
-                    Column(
-                      children: [
-                        Obx(() => SingleChildScrollView(
-                              child: Column(
-                                children: controller.prices
-                                    .asMap()
-                                    .entries
-                                    .map((item) {
-                                  int idx = item.key + 1;
-                                  // String val = user.value;
-                                  return ExpansionTile(
-                                    title: Text(
-                                      item.value['sellerName'],
-                                    ),
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.only(left: 5, right: 5),
-                                        child: Column(
-                                          children: renderSingleCollapse(),
-                                          // [
-                                          //   Card(
-                                          //     // color: Colors.red,
-                                          //     child: ListTile(
-                                          //         title: Row(
-                                          //       children: const [
-                                          //         SizedBox(
-                                          //           width: 150,
-                                          //           child: Text(
-                                          //             'Price',
-                                          //             // style: TextStyle(fontSize: 30),
-                                          //           ),
-                                          //         ),
-                                          //         SizedBox(
-                                          //           width: 20,
-                                          //           child: Text(
-                                          //             ':',
-                                          //             // style: TextStyle(fontSize: 30),
-                                          //           ),
-                                          //         ),
-                                          //         Text(
-                                          //           '123500',
-                                          //           // style: TextStyle(fontSize: 30),
-                                          //         ),
-                                          //       ],
-                                          //     )),
-                                          //   ),
-                                          //   Card(
-                                          //     // color: Colors.red,
-                                          //     child: ListTile(
-                                          //       title: Row(
-                                          //         children: const [
-                                          //           SizedBox(
-                                          //             width: 150,
-                                          //             child: Text(
-                                          //               'Guarantee',
-                                          //               // style: TextStyle(fontSize: 30),
-                                          //             ),
-                                          //           ),
-                                          //           SizedBox(
-                                          //             width: 20,
-                                          //             child: Text(
-                                          //               ':',
-                                          //               // style: TextStyle(fontSize: 30),
-                                          //             ),
-                                          //           ),
-                                          //           Text(
-                                          //             'yes',
-                                          //             // style: TextStyle(fontSize: 30),
-                                          //           ),
-                                          //         ],
-                                          //       ),
-                                          //     ),
-                                          //   ),
-                                          // ],
+                    Container(
+                      padding: const EdgeInsets.only(left: 5, right: 5),
+                      child: Column(
+                        children: [
+                          Obx(() => SingleChildScrollView(
+                                child: Column(
+                                  children: controller.prices
+                                      .asMap()
+                                      .entries
+                                      .map((item) {
+                                    int idx = item.key + 1;
+                                    // String val = user.value;
+                                    return ExpansionTile(
+                                      title: Text(
+                                        item.value['sellerName'],
+                                      ),
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 10, right: 10),
+                                          child: Column(
+                                            children: renderSingleCollapse(),
+                                          ),
                                         ),
-                                      )
-                                    ],
-                                  );
-                                  // return Text(date);
-                                }).toList(),
-                              ),
-                            )),
-                      ],
-                    )
+                                      ],
+                                    );
+                                    // return Text(date);
+                                  }).toList(),
+                                ),
+                              )),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),

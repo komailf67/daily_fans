@@ -11,38 +11,39 @@ class DatesView extends GetView {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              LimitedBox(
-                child: SvgPicture.asset(
-                  'lib/assets/svg/avaLogo.svg',
-                  width: 50,
-                  height: 50,
-                  color: Theme.of(context).primaryColor,
+        body: SafeArea(
+          child: Center(
+              child: Container(
+            margin: EdgeInsets.only(top: 20),
+            child: Column(
+              children: [
+                LimitedBox(
+                  child: SvgPicture.asset(
+                    'lib/assets/svg/avaLogo.svg',
+                    width: 50,
+                    height: 50,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  maxHeight: 100,
+                  maxWidth: 100,
                 ),
-                maxHeight: 100,
-                maxWidth: 100,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Sort(),
-                  AddNewDate(),
-                ],
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              const DatesList(),
-            ],
-          ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Sort(),
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const DatesList(),
+              ],
+            ),
+          )),
         ),
-      ),
-    );
+        floatingActionButton: AddNewDate());
   }
 }
