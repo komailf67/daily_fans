@@ -41,8 +41,6 @@ class DatesList extends GetView<DatesController> {
       return gameCells;
     }
 
-    print(renderSingleCollapse());
-
     void _showListInModal() {
       showModalBottomSheet(
           // backgroundColor: Colors.red,
