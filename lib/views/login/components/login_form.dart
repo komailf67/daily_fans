@@ -129,8 +129,8 @@ class LoginForm extends GetView<LoginController> {
                         // if (controller.formKey.currentState == null ||
                         //     !controller.formKey.currentState!.validate())
                         //   return;
-                        // await controller.login();
-                        Get.toNamed(DatesView.route());
+                        await controller.login();
+                        // Get.toNamed(DatesView.route());
                       },
                       child: Obx(
                         () => controller.loading.value

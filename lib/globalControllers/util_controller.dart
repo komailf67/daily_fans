@@ -1,5 +1,6 @@
 import 'package:daily_fans/enums/auth_enum.dart';
 import 'package:daily_fans/utils/storage.dart';
+import 'package:daily_fans/views/login/login_view.dart';
 import 'package:get/get.dart';
 
 const String AccessTokenStorageTag = "access_token";
@@ -23,5 +24,6 @@ class UtilController extends GetxController {
     var storage = Storage();
     await storage.clearElement(AccessTokenStorageTag);
     authStatus.value = AuthEnum.NotAuthorized;
+    Get.toNamed(LoginView.route());
   }
 }

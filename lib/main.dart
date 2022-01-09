@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
+import 'middlewares/anti_auth_middleware.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
       // darkTheme: Themes.lightTheme(context),
       theme: Themes.lightTheme(context),
       themeMode: ThemeMode.light,
-      initialRoute: LoginView.route(),
+      initialRoute: DatesView.route(),
       initialBinding: InitialBinding(),
       getPages: [
         GetPage(
@@ -34,7 +36,7 @@ class MyApp extends StatelessWidget {
           page: () => const LoginView(),
           binding: LoginBinding(),
           middlewares: [
-            // AntiAuthMiddleWare(),
+            AntiAuthMiddleWare(),
           ],
         ),
         GetPage(
