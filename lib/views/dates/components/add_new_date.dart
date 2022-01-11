@@ -138,7 +138,10 @@ class AddNewDate extends GetView<DatesController> {
                                   //   return;
                                   // await controller.login();
                                   // Get.toNamed(DatesView.route());
-                                  controller.addNewDate();
+                                  var res = await controller.addNewDate();
+                                  if (res != null) {
+                                    Navigator.pop(context);
+                                  }
                                 },
                                 child: const Text('Submit'),
                               ),

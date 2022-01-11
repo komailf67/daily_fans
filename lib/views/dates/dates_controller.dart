@@ -252,13 +252,15 @@ class DatesController extends GetxController {
   }
 
   Future addNewDate() async {
+    var year = yearController.text.length == 2
+        ? yearController.text
+        : "0${yearController.text}"; //TODO
     var req = AddNewDateRequest(
       title: titleController.text,
-      dateTime:
-          "14${yearController.text}/${monthController.text}/${dayController.text}",
+      dateTime: "14$year/${monthController.text}/${dayController.text}",
     );
     var res = await addNewDateService(req);
-    if (res == null) return;
+    return res;
   }
 
   Future getDatesList() async {
