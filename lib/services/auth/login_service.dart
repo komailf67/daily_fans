@@ -1,6 +1,6 @@
+import 'dart:io';
+
 import 'package:daily_fans/models/main_response_model.dart';
-import 'package:daily_fans/models/otpToken/otp_token_model.dart';
-import 'package:daily_fans/models/refreshToken/refresh_token_model.dart';
 import 'package:daily_fans/models/user/user_model.dart';
 import 'package:daily_fans/utils/base_url.dart';
 import 'package:daily_fans/utils/service_helper.dart';
@@ -23,14 +23,9 @@ class LoginServiceRequest {
 
 @JsonSerializable()
 class LoginServiceResponse extends MainResponse {
-  String? accessToken;
-  RefreshTokenModel? refreshToken;
-  UserModel? user;
-  OtpTokenModel? otpToken;
+  UserModel data;
 
-  LoginServiceResponse(
-      this.accessToken, this.refreshToken, this.user, this.otpToken)
-      : super('', 0);
+  LoginServiceResponse(this.data) : super('', 0);
 
   Map<String, dynamic> toJson() => _$LoginServiceResponseToJson(this);
 
@@ -39,8 +34,9 @@ class LoginServiceResponse extends MainResponse {
 }
 
 Future<LoginServiceResponse?> loginService(LoginServiceRequest request) async {
+  // HttpOverrides.global = MyHttpOverrides();
   var service = ServiceHelper(
-      url: "/authorization/login",
+      url: "/Users/authenticate",
       methodEnum: HttpMethodEnum.POST,
       loaderType: LoaderType.Action,
       request: request.toJson(),

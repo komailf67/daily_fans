@@ -1,6 +1,6 @@
 import 'package:daily_fans/enums/auth_enum.dart';
 import 'package:daily_fans/globalControllers/util_controller.dart';
-import 'package:daily_fans/service/auth/login_service.dart';
+import 'package:daily_fans/services/auth/login_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:daily_fans/utils/storage.dart';
@@ -41,8 +41,10 @@ class LoginController extends GetxController {
 
   // Private logics
   Future _makUserLogin(LoginServiceResponse res) async {
-    if (res.accessToken == null || res.refreshToken == null) return;
-    await _setTokens(res.accessToken!, res.refreshToken!.token);
+    // if (res.token == null || res.refreshToken == null) return;
+    if (res.data.token == null) return;
+    // await _setTokens(res.token!, res.refreshToken!.token);
+    await _setTokens(res.data.token!, res.data.token!);
     _setLoginStatusToOk();
   }
 

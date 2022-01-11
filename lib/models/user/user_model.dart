@@ -4,20 +4,20 @@ part 'user_model.g.dart';
 
 @JsonSerializable()
 class UserModel {
-  int id;
-  String? phone;
-  bool isTwoStepVerificationEnabled;
-  bool isPhoneRegistered;
-  bool isBlocked;
-  String username;
+  int? id;
+  String? firstName;
+  String? lastName;
+  String? username;
+  int? userType;
+  String? token;
 
   UserModel({
-    required this.id,
-    this.phone,
-    required this.isTwoStepVerificationEnabled,
-    required this.isPhoneRegistered,
-    required this.isBlocked,
-    required this.username,
+    this.id,
+    this.firstName,
+    this.lastName,
+    this.username,
+    this.userType,
+    this.token,
   });
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);

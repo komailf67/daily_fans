@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:daily_fans/bindings/initial_binding.dart';
 import 'package:daily_fans/middlewares/anti_auth_middleware.dart';
 import 'package:daily_fans/theme/deafult_theme.dart';
@@ -10,6 +12,14 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
 import 'middlewares/anti_auth_middleware.dart';
+
+// class MyHttpOverrides extends HttpOverrides{
+//   @override
+//   HttpClient createHttpClient(SecurityContext? context){
+//     return super.createHttpClient(context)
+//       ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+//   }
+// }
 
 void main() {
   runApp(const MyApp());
@@ -28,7 +38,7 @@ class MyApp extends StatelessWidget {
       // darkTheme: Themes.lightTheme(context),
       theme: Themes.lightTheme(context),
       themeMode: ThemeMode.light,
-      initialRoute: DatesView.route(),
+      initialRoute: LoginView.route(),
       initialBinding: InitialBinding(),
       getPages: [
         GetPage(

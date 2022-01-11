@@ -1,8 +1,21 @@
+import 'package:daily_fans/services/date/add_new_date_service.dart';
+import 'package:daily_fans/services/date/get_dates_list_service.dart';
+import 'package:daily_fans/services/date/get_prices_list_by_date_service.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 
 class DatesController extends GetxController {
-  List<Map<String, String>> dates = [
-    {'date': '1400/3/4', 'title': 'ali'},
+  final formKey = GlobalKey<FormState>();
+  final titleController = TextEditingController();
+  final dayController = TextEditingController();
+  final monthController = TextEditingController();
+  final yearController = TextEditingController();
+
+  List dates = [].obs;
+  List prices = [].obs;
+
+  List<Map<String, String>> dates2 = [
+    {'date': '1400/3/4', 'title': 'aliw'},
     {'date': '1400/3/5', 'title': 'reza'},
     {'date': '1400/3/6', 'title': 'mohammad'},
     {'date': '1400/3/7', 'title': 'saeid'},
@@ -26,7 +39,7 @@ class DatesController extends GetxController {
     {'date': '1400/3/9', 'title': 'hasan'},
   ].obs;
 
-  List prices = [
+  List prices2 = [
     {
       'sellerName': 'seller 1',
       'items': {
@@ -229,7 +242,47 @@ class DatesController extends GetxController {
 
   var descending = true.obs;
 
+  @override
+  void onReady() {
+    getDatesList();
+  }
+
   void changeSortDates() {
     descending.value = !descending.value;
+  }
+
+  Future addNewDate() async {
+    var req = AddNewDateRequest(
+      title: titleController.text,
+      dateTime:
+          "14${yearController.text}/${monthController.text}/${dayController.text}",
+    );
+    var res = await addNewDateService(req);
+    if (res == null) return;
+  }
+
+  Future getDatesList() async {
+    var res = await getDatesListService();
+    if (res == null) return;
+
+    for (var key in res!.data!) {
+      dates.add(key);
+    }
+  }
+
+  Future getPriceListByDate(int dateId) async {
+    try {
+      var res = await getPricesListByDateService(dateId);
+      for (var key in res!.data) {
+        prices.add(key);
+      }
+    } catch (e) {
+      print('errrrrrrrrrrrrrrrrrr');
+      print(e);
+    }
+  }
+
+  void emptyPriceList() {
+    prices.clear();
   }
 }

@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+import 'package:daily_fans/models/date/price_model.dart';
 import 'package:daily_fans/views/dates/dates_controller.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -10,29 +9,40 @@ class DatesList extends GetView<DatesController> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> renderSingleCollapse() {
+    List<Widget> renderSingleCollapse(item) {
+      var priceItem = PriceModel(
+          description: item['description'],
+          price: item['price'],
+          portNumber: item['portNumber'],
+          yearModel: item['yearModel'],
+          color: item['color'].toString(),
+          hasGuarantee: item['hasGuarantee']);
       List<Widget> gameCells = <Widget>[];
-      for (var key in controller.prices[0]['items'].keys) {
-        gameCells.add(Padding(
-          padding: EdgeInsets.only(left: 10, right: 10),
-          child: Card(
-            child: ListTile(
-              // onTap: () => _showListInModal(),
-              leading: Text(
-                key.toString(),
-              ),
-              trailing: Text(
-                controller.prices[0]['items'][key].toString(),
+
+      priceItem.toJson().forEach((final String key, final value) {
+        if (value != null) {
+          gameCells.add(Padding(
+            padding: EdgeInsets.only(left: 10, right: 10),
+            child: Card(
+              child: ListTile(
+                // onTap: () => _showListInModal(),
+                leading: Text(
+                  key.toString(),
+                ),
+                trailing: Text(
+                  value.toString(),
+                ),
               ),
             ),
-          ),
-        ));
-      }
-      ;
+          ));
+        }
+      });
       return gameCells;
     }
 
-    void _showListInModal() {
+    void _showListInModal(int dateId) {
+      controller.emptyPriceList();
+      controller.getPriceListByDate(dateId);
       showModalBottomSheet(
           // backgroundColor: Colors.red,
           isScrollControlled: true,
@@ -79,14 +89,15 @@ class DatesList extends GetView<DatesController> {
                                     // String val = user.value;
                                     return ExpansionTile(
                                       title: Text(
-                                        item.value['sellerName'],
+                                        item.value['title'],
                                       ),
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.only(
                                               left: 10, right: 10),
                                           child: Column(
-                                            children: renderSingleCollapse(),
+                                            children: renderSingleCollapse(
+                                                item.value),
                                           ),
                                         ),
                                       ],
@@ -122,20 +133,16 @@ class DatesList extends GetView<DatesController> {
                           // String val = user.value;
                           return Card(
                             child: ListTile(
-                              onTap: () => _showListInModal(),
+                              onTap: () => _showListInModal(user.value['id']),
                               title: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    user.value['date'].toString(),
-                                    // style: TextStyle(
-                                    //     color: Colors.red, fontSize: 16),
+                                    user.value['dateTime'].toString(),
                                   ),
                                   Text(
                                     user.value['title'].toString(),
-                                    // style: TextStyle(
-                                    //     color: Colors.red, fontSize: 16),
                                   )
                                 ],
                               ),
@@ -158,70 +165,3 @@ class DatesList extends GetView<DatesController> {
     );
   }
 }
-
-
-// ExpansionTile(
-//                       title: Text('Seller One'),
-//                       children: [
-//                         Padding(
-//                           padding: EdgeInsets.only(left: 5, right: 5),
-//                           child: Column(
-//                             children: [
-//                               Card(
-//                                 // color: Colors.red,
-//                                 child: ListTile(
-//                                     title: Row(
-//                                   children: const [
-//                                     SizedBox(
-//                                       width: 150,
-//                                       child: Text(
-//                                         'Price',
-//                                         // style: TextStyle(fontSize: 30),
-//                                       ),
-//                                     ),
-//                                     SizedBox(
-//                                       width: 20,
-//                                       child: Text(
-//                                         ':',
-//                                         // style: TextStyle(fontSize: 30),
-//                                       ),
-//                                     ),
-//                                     Text(
-//                                       '123500',
-//                                       // style: TextStyle(fontSize: 30),
-//                                     ),
-//                                   ],
-//                                 )),
-//                               ),
-//                               Card(
-//                                 // color: Colors.red,
-//                                 child: ListTile(
-//                                   title: Row(
-//                                     children: const [
-//                                       SizedBox(
-//                                         width: 150,
-//                                         child: Text(
-//                                           'Guarantee',
-//                                           // style: TextStyle(fontSize: 30),
-//                                         ),
-//                                       ),
-//                                       SizedBox(
-//                                         width: 20,
-//                                         child: Text(
-//                                           ':',
-//                                           // style: TextStyle(fontSize: 30),
-//                                         ),
-//                                       ),
-//                                       Text(
-//                                         'yes',
-//                                         // style: TextStyle(fontSize: 30),
-//                                       ),
-//                                     ],
-//                                   ),
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         )
-//                       ],
-//                     ),
