@@ -1,5 +1,4 @@
 import 'package:daily_fans/theme/theme_constants.dart';
-import 'package:daily_fans/views/dates/dates_view.dart';
 import 'package:daily_fans/views/login/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -59,7 +58,7 @@ class LoginForm extends GetView<LoginController> {
                           controller: controller.usernameController,
                           textInputAction: TextInputAction.next,
                           decoration: const InputDecoration(
-                            labelText: "Email address",
+                            labelText: "User name",
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {

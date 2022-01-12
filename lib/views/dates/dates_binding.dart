@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 class DatesBinding extends Bindings {
   @override
   void dependencies() {
-    Get.delete<DatesController>();
+    // Get.delete<DatesController>();
     Get.lazyPut(() => DatesController());
   }
 }

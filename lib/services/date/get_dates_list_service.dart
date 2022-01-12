@@ -27,9 +27,9 @@ class GetDatesListResponse extends MainResponse {
       _$GetDatesListResponseFromJson(json);
 }
 
-Future<GetDatesListResponse?> getDatesListService() async {
+Future<GetDatesListResponse?> getDatesListService(String sortType) async {
   var service = ServiceHelper(
-      url: "/PriceList",
+      url: "/PriceList/getAll$sortType",
       methodEnum: HttpMethodEnum.GET,
       loaderType: LoaderType.Action,
       microService: MicroServiceEnum.AAA);

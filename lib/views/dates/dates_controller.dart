@@ -249,6 +249,7 @@ class DatesController extends GetxController {
 
   void changeSortDates() {
     descending.value = !descending.value;
+    getDatesList();
   }
 
   Future addNewDate() async {
@@ -264,9 +265,9 @@ class DatesController extends GetxController {
   }
 
   Future getDatesList() async {
-    var res = await getDatesListService();
+    var res = await getDatesListService(descending.value ? 'dsc' : 'asc');
     if (res == null) return;
-
+    emptyDatesList();
     for (var key in res!.data!) {
       dates.add(key);
     }
@@ -282,6 +283,10 @@ class DatesController extends GetxController {
       print('errrrrrrrrrrrrrrrrrr');
       print(e);
     }
+  }
+
+  void emptyDatesList() {
+    dates.clear();
   }
 
   void emptyPriceList() {
