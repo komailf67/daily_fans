@@ -8,6 +8,6 @@ class BaseUrl {
 
   static String get(MicroServiceEnum baseUrlEnum) {
     // return "$_urlSchema://${_subdomains[baseUrlEnum.index]}.$_domain";
-    return "https://www.salamateat.com";
+    return "https://dailyfans.goldenhat.info";
   }
 }

@@ -29,7 +29,7 @@ class GetDatesListResponse extends MainResponse {
 
 Future<GetDatesListResponse?> getDatesListService(String sortType) async {
   var service = ServiceHelper(
-      url: "/PriceList/getAll$sortType",
+      url: "/PriceList/getAll/$sortType",
       methodEnum: HttpMethodEnum.GET,
       loaderType: LoaderType.Action,
       microService: MicroServiceEnum.AAA);

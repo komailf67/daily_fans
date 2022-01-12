@@ -8,8 +8,8 @@ class PriceModel {
   String? title;
   String? description;
   int? price;
-  String? portNumber;
-  String? yearModel;
+  String? partNumber;
+  int? yearModel;
   String? color;
   bool? hasGuarantee;
   int? priceListId;
@@ -19,7 +19,7 @@ class PriceModel {
     this.title,
     this.description,
     this.price,
-    this.portNumber,
+    this.partNumber,
     this.yearModel,
     this.color,
     this.hasGuarantee,
