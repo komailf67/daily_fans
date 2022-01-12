@@ -329,14 +329,14 @@ class DatesController extends GetxController {
 
   Future addNewProductDetails() async {
     var req = AddNewProductDetailsRequest(
-      title: productDetails["title"],
-      description: productDetails["description"],
+      title: productDetails["title"] ?? '',
+      description: productDetails["description"] ?? '' ?? '',
       price: int.parse(productDetails["price"]),
-      partNumber: productDetails["partNumber"],
-      yearModel: productDetails["yearModel"],
-      color: productDetails["color"],
-      hasGuarantee: productDetails["hasGuarantee"],
-      priceListId: productDetails["priceListId"],
+      partNumber: productDetails["partNumber"] ?? '',
+      yearModel: productDetails["yearModel"] ?? '',
+      color: productDetails["color"] ?? '',
+      hasGuarantee: productDetails["hasGuarantee"] ?? true,
+      priceListId: productDetails["priceListId"] ?? '',
     );
     var res = await addNewProductDetailsService(req);
     return res;

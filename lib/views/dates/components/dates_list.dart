@@ -499,6 +499,15 @@ class DatesList extends GetView<DatesController> {
                                 // style: const TextStyle(
                                 //     color: Colors.red, fontSize: 16),
                               ),
+                              trailing: IconButton(
+                                icon: Icon(
+                                  Icons.share,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                color: Theme.of(context).primaryColor,
+                                onPressed: () => {},
+                                iconSize: 25,
+                              ),
                             ),
                           );
                           // return Text(date);
