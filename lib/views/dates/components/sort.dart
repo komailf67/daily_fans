@@ -10,8 +10,8 @@ class Sort extends GetView<DatesController> {
   Widget build(BuildContext context) {
     void changeSort() {
       var utils = Get.find<UtilController>();
-      utils.logout();
-      // controller.changeSortDates();
+      // utils.logout();
+      controller.changeSortDates();
     }
 
     return Obx(
