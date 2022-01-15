@@ -32,7 +32,7 @@ class DatesList extends GetView<DatesController> {
             padding: EdgeInsets.only(left: 10, right: 10),
             child: Card(
               child: ListTile(
-                // onTap: () => _showDatesListInModal(),
+                // onTap: () => _showPriceListModal(),
                 leading: Text(
                   key.toString(),
                 ),
@@ -334,9 +334,9 @@ class DatesList extends GetView<DatesController> {
                                   ],
                                 ),
                               ),
-                              const SizedBox(
-                                height: 15,
-                              ),
+                              // const SizedBox(
+                              //   height: 15,
+                              // ),
                               SizedBox(
                                 width: double.infinity,
                                 height: 55,
@@ -364,9 +364,9 @@ class DatesList extends GetView<DatesController> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 24,
-                    ),
+                    // const SizedBox(
+                    //   height: 24,
+                    // ),
                   ],
                 ),
               ),
@@ -374,7 +374,8 @@ class DatesList extends GetView<DatesController> {
           });
     }
 
-    void _showDatesListInModal(int dateId) {
+    void _showPriceListModal(int dateId) {
+      ScrollController _scrollController = new ScrollController();
       controller.emptyPriceList();
       controller.getPriceListByDate(dateId);
       showModalBottomSheet(
@@ -382,91 +383,107 @@ class DatesList extends GetView<DatesController> {
           isScrollControlled: true,
           context: context,
           builder: (context) {
-            return Obx(() => Container(
-                  color: const Color(0xFF737373),
-                  height: controller.prices.length > 0
-                      ? MediaQuery.of(context).size.height * .7
-                      : MediaQuery.of(context).size.height * .2, //TODO
-                  // height: MediaQuery.of(context).size.height * .7,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).canvasColor,
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20))),
-                    child: ListView(
-                      children: [
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Container(
-                          width: 70.0,
-                          height: 70.0,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                // fit: BoxFit.fill,
-                                image:
-                                    AssetImage('lib/assets/images/logo.jpg')),
+            return Obx(
+              () => Container(
+                color: const Color(0xFF737373),
+                height: controller.prices.length > 0
+                    ? MediaQuery.of(context).size.height * .7
+                    : MediaQuery.of(context).size.height * .10,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).canvasColor,
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20))),
+                  child: Column(
+                    children: [
+                      if (controller.prices.length > 0)
+                        IconButton(
+                          onPressed: () {
+                            _scrollController.animateTo(
+                              _scrollController.position.maxScrollExtent,
+                              curve: Curves.easeOut,
+                              duration: const Duration(milliseconds: 500),
+                            );
+                          },
+                          color: Theme.of(context).primaryColor,
+                          icon: Icon(
+                            Icons.arrow_drop_down_sharp,
+                            size: 60,
                           ),
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(left: 5, right: 5),
-                          child: Column(
-                            children: [
-                              SingleChildScrollView(
-                                child: Column(
-                                  children: controller.prices
-                                      .asMap()
-                                      .entries
-                                      .map((item) {
-                                    int idx = item.key + 1;
-                                    // String val = user.value;
-                                    return ExpansionTile(
-                                      title: Text(
-                                        item.value['title'],
-                                      ),
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 10, right: 10),
-                                          child: Column(
-                                            children: renderSingleCollapse(
-                                                item.value),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: controller.prices.length > 0
+                            ? MediaQuery.of(context).size.height * .55
+                            : MediaQuery.of(context).size.height * 0,
+                        // height: controller.prices.length > 0
+                        //     ? MediaQuery.of(context).size.height * .6
+                        //     : MediaQuery.of(context).size.height * .1,
+                        child: ListView(
+                          shrinkWrap: true,
+                          controller: _scrollController,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.only(left: 5, right: 5),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    child: Column(
+                                      children: controller.prices
+                                          .asMap()
+                                          .entries
+                                          .map((item) {
+                                        int idx = item.key + 1;
+                                        // String val = user.value;
+                                        return ExpansionTile(
+                                          title: Text(
+                                            item.value['title'],
                                           ),
-                                        ),
-                                      ],
-                                    );
-                                    // return Text(date);
-                                  }).toList(),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: Align(
-                            alignment: Alignment.bottomLeft,
-                            child: FloatingActionButton(
-                              onPressed: () =>
-                                  _showAddNewPriceListInModal(dateId),
-                              backgroundColor: Theme.of(context).primaryColor,
-                              child: const Icon(
-                                Icons.add,
-                                size: 30,
-                                color: Colors.white,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10, right: 10),
+                                              child: Column(
+                                                children: renderSingleCollapse(
+                                                    item.value),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                        // return Text(date);
+                                      }).toList(),
+                                    ),
+                                  )
+                                ],
                               ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: FloatingActionButton(
+                            onPressed: () =>
+                                _showAddNewPriceListInModal(dateId),
+                            backgroundColor: Theme.of(context).primaryColor,
+                            child: const Icon(
+                              Icons.add,
+                              size: 30,
+                              color: Colors.white,
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ));
+                ),
+              ),
+            );
           });
     }
 
@@ -496,7 +513,7 @@ class DatesList extends GetView<DatesController> {
                           return Card(
                             child: ListTile(
                               onTap: () =>
-                                  _showDatesListInModal(user.value['id']),
+                                  _showPriceListModal(user.value['id']),
                               title: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
