@@ -32,7 +32,7 @@ class DatesList extends GetView<DatesController> {
             padding: EdgeInsets.only(left: 10, right: 10),
             child: Card(
               child: ListTile(
-                // onTap: () => _showListInModal(),
+                // onTap: () => _showDatesListInModal(),
                 leading: Text(
                   key.toString(),
                 ),
@@ -374,7 +374,7 @@ class DatesList extends GetView<DatesController> {
           });
     }
 
-    void _showListInModal(int dateId) {
+    void _showDatesListInModal(int dateId) {
       controller.emptyPriceList();
       controller.getPriceListByDate(dateId);
       showModalBottomSheet(
@@ -384,12 +384,10 @@ class DatesList extends GetView<DatesController> {
           builder: (context) {
             return Obx(() => Container(
                   color: const Color(0xFF737373),
-                  // height: controller.prices.length > 0
-                  //     ? MediaQuery.of(context).size.height *
-                  //         (controller.prices.length + 1) *
-                  //         .14
-                  //     : MediaQuery.of(context).size.height * .2, //TODO
-                  height: MediaQuery.of(context).size.height * .7,
+                  height: controller.prices.length > 0
+                      ? MediaQuery.of(context).size.height * .7
+                      : MediaQuery.of(context).size.height * .2, //TODO
+                  // height: MediaQuery.of(context).size.height * .7,
                   child: Container(
                     decoration: BoxDecoration(
                         color: Theme.of(context).canvasColor,
@@ -404,7 +402,7 @@ class DatesList extends GetView<DatesController> {
                         Container(
                           width: 70.0,
                           height: 70.0,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             image: DecorationImage(
                                 // fit: BoxFit.fill,
@@ -449,13 +447,20 @@ class DatesList extends GetView<DatesController> {
                             ],
                           ),
                         ),
-                        FloatingActionButton(
-                          onPressed: () => _showAddNewPriceListInModal(dateId),
-                          backgroundColor: Theme.of(context).primaryColor,
-                          child: const Icon(
-                            Icons.add,
-                            size: 30,
-                            color: Colors.white,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: Align(
+                            alignment: Alignment.bottomLeft,
+                            child: FloatingActionButton(
+                              onPressed: () =>
+                                  _showAddNewPriceListInModal(dateId),
+                              backgroundColor: Theme.of(context).primaryColor,
+                              child: const Icon(
+                                Icons.add,
+                                size: 30,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         ),
                       ],
@@ -490,7 +495,8 @@ class DatesList extends GetView<DatesController> {
                           // String val = user.value;
                           return Card(
                             child: ListTile(
-                              onTap: () => _showListInModal(user.value['id']),
+                              onTap: () =>
+                                  _showDatesListInModal(user.value['id']),
                               title: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
