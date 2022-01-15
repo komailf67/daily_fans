@@ -4,6 +4,7 @@ import 'package:daily_fans/services/date/add_new_date_service.dart';
 import 'package:daily_fans/services/date/add_new_product_details_service.dart';
 import 'package:daily_fans/services/date/get_dates_list_service.dart';
 import 'package:daily_fans/services/date/get_prices_list_by_date_service.dart';
+import 'package:daily_fans/services/date/send_date_to_contacts_service.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
@@ -340,5 +341,9 @@ class DatesController extends GetxController {
     );
     var res = await addNewProductDetailsService(req);
     return res;
+  }
+
+  Future sendDatesToContacts(priceListId) async {
+    return await sendDatesToContactsService(priceListId);
   }
 }

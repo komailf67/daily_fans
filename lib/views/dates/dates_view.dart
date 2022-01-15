@@ -10,16 +10,16 @@ class DatesView extends GetView {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-          child: Center(
-              child: Container(
-            margin: EdgeInsets.only(top: 5),
+      body: SafeArea(
+        child: Center(
+          child: Container(
+            margin: const EdgeInsets.only(top: 5),
             child: Column(
               children: [
                 Container(
                   width: 100.0,
                   height: 100.0,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
                         fit: BoxFit.fill,
@@ -41,8 +41,11 @@ class DatesView extends GetView {
                 const DatesList(),
               ],
             ),
-          )),
+          ),
         ),
-        floatingActionButton: AddNewDate());
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      floatingActionButton: const AddNewDate(),
+    );
   }
 }

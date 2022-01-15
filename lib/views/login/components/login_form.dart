@@ -36,7 +36,18 @@ class LoginForm extends GetView<LoginController> {
                 height: 60,
               ),
               Text(
-                'Sign in to your account',
+                'Sign in',
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.subtitle2?.fontSize,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                'to your account',
                 style: TextStyle(
                   fontSize: Theme.of(context).textTheme.subtitle1?.fontSize,
                   fontWeight: FontWeight.bold,
@@ -44,7 +55,7 @@ class LoginForm extends GetView<LoginController> {
                 ),
               ),
               const SizedBox(
-                height: 70,
+                height: 50,
               ),
               SizedBox(
                 width: double.infinity,

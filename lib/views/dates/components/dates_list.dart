@@ -1,4 +1,6 @@
+import 'package:daily_fans/globalControllers/util_controller.dart';
 import 'package:daily_fans/models/date/price_model.dart';
+import 'package:daily_fans/services/date/send_date_to_contacts_service.dart';
 import 'package:daily_fans/views/dates/dates_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -12,6 +14,8 @@ class DatesList extends GetView<DatesController> {
 
   @override
   Widget build(BuildContext context) {
+    var utilsController = Get.find<UtilController>();
+
     List<Widget> renderSingleCollapse(item) {
       var priceItem = PriceModel(
           description: item['description'],
@@ -43,9 +47,6 @@ class DatesList extends GetView<DatesController> {
       return gameCells;
     }
 
-    void changeColor(Color color) {
-      // setState(() => pickerColor = color);
-    }
     void _showAddNewPriceListInModal(int dateId) {
       controller.setPriceListId(dateId);
       showModalBottomSheet(
@@ -464,7 +465,15 @@ class DatesList extends GetView<DatesController> {
           });
     }
 
-    return Container(
+    void _onSubmit() {
+      // setState(() => _isLoading = true);
+      Future.delayed(
+        const Duration(seconds: 2),
+        // () => setState(() => _isLoading = false),
+      );
+    }
+
+    return SizedBox(
       height: MediaQuery.of(context).size.height * .7, //TODO
       child: ListView(
         shrinkWrap: true,
@@ -491,7 +500,7 @@ class DatesList extends GetView<DatesController> {
                                   ),
                                   Text(
                                     user.value['title'].toString(),
-                                  )
+                                  ),
                                 ],
                               ),
                               leading: Text(
@@ -500,12 +509,21 @@ class DatesList extends GetView<DatesController> {
                                 //     color: Colors.red, fontSize: 16),
                               ),
                               trailing: IconButton(
-                                icon: Icon(
-                                  Icons.share,
-                                  color: Theme.of(context).primaryColor,
-                                ),
+                                icon: utilsController.skeletonLoading.isTrue
+                                    ? SizedBox(
+                                        height: 15,
+                                        child: CircularProgressIndicator(
+                                          color: Theme.of(context).primaryColor,
+                                          strokeWidth: 3,
+                                        ),
+                                      )
+                                    : Icon(
+                                        Icons.share,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
                                 color: Theme.of(context).primaryColor,
-                                onPressed: () => {},
+                                onPressed: () => utilsController
+                                    .toggleSkeletonLoadingState(), //TODO
                                 iconSize: 25,
                               ),
                             ),
