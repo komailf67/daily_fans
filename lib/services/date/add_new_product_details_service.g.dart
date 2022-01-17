@@ -14,7 +14,7 @@ AddNewProductDetailsRequest _$AddNewProductDetailsRequestFromJson(
       price: json['price'] as int,
       partNumber: json['partNumber'] as String,
       yearModel: json['yearModel'] as String,
-      color: json['color'],
+      colorId: json['colorId'],
       hasGuarantee: json['hasGuarantee'] as bool,
       priceListId: json['priceListId'] as int,
     );
@@ -27,7 +27,7 @@ Map<String, dynamic> _$AddNewProductDetailsRequestToJson(
       'price': instance.price,
       'partNumber': instance.partNumber,
       'yearModel': instance.yearModel,
-      'color': instance.color,
+      'colorId': instance.colorId,
       'hasGuarantee': instance.hasGuarantee,
       'priceListId': instance.priceListId,
     };

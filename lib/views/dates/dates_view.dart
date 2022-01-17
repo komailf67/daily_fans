@@ -1,5 +1,6 @@
 import 'package:daily_fans/views/dates/components/add_new_date.dart';
 import 'package:daily_fans/views/dates/components/dates_list.dart';
+import 'package:daily_fans/views/dates/components/profile_button.dart';
 import 'package:daily_fans/views/dates/components/sort.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,8 +32,9 @@ class DatesView extends GetView {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     Sort(),
+                    ProfileButton(),
                   ],
                 ),
                 const SizedBox(

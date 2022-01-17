@@ -15,7 +15,7 @@ class AddNewProductDetailsRequest {
   int price;
   String partNumber;
   String yearModel;
-  dynamic color;
+  dynamic colorId;
   bool hasGuarantee;
   int priceListId;
 
@@ -25,7 +25,7 @@ class AddNewProductDetailsRequest {
       required this.price,
       required this.partNumber,
       required this.yearModel,
-      required this.color,
+      required this.colorId,
       required this.hasGuarantee,
       required this.priceListId});
 
@@ -54,7 +54,7 @@ class AddNewProductDetailsResponse extends MainResponse {
 
 Future<AddNewProductDetailsResponse?> addNewProductDetailsService(
     AddNewProductDetailsRequest request) async {
-  // HttpOverrides.global = MyHttpOverrides();
+  print(request.toJson());
   var service = ServiceHelper(
       url: "/PriceListD/create",
       methodEnum: HttpMethodEnum.POST,

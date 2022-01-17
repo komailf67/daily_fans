@@ -1,3 +1,4 @@
+import 'package:daily_fans/globalControllers/util_controller.dart';
 import 'package:daily_fans/theme/theme_constants.dart';
 import 'package:daily_fans/views/login/login_controller.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ class LoginForm extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
+    var utils = Get.find<UtilController>();
     // bool isChecked = false;
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -64,6 +66,7 @@ class LoginForm extends GetView<LoginController> {
                   children: [
                     SizedBox(
                       child: TextFormField(
+                        autofocus: true,
                         style: TextStyle(
                             color: inputTextColor,
                             fontSize:
@@ -137,27 +140,30 @@ class LoginForm extends GetView<LoginController> {
                 width: double.infinity,
                 height: 55,
                 child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0.0,
-                      shadowColor: Colors.transparent,
-                    ),
-                    onPressed: () async {
-                      // if (controller.formKey.currentState == null ||
-                      //     !controller.formKey.currentState!.validate())
-                      //   return;
-                      await controller.login();
-                      // Get.toNamed(DatesView.route());
-                    },
-                    child: Obx(
-                      () => controller.loading.value
-                          ? const CircularProgressIndicator(
-                              color: Colors.white,
-                            )
-                          : const Text(
-                              'Sign in',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                    )),
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0.0,
+                    shadowColor: Colors.transparent,
+                  ),
+                  onPressed: () async {
+                    // if (controller.formKey.currentState == null ||
+                    //     !controller.formKey.currentState!.validate())
+                    //   return;
+                    await controller.login();
+                    // Get.toNamed(DatesView.route());
+                  },
+                  child: Obx(
+                    //TODO: button kit with loading
+                    () => utils.skeletonLoading.value
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : const Text(
+                            'Sign in',
+                            style:
+                                TextStyle(fontSize: 18), //font size from theme
+                          ),
+                  ),
+                ),
               ),
             ],
           ),

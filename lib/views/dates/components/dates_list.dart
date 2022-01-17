@@ -1,13 +1,30 @@
 import 'package:daily_fans/globalControllers/util_controller.dart';
+import 'package:daily_fans/models/color/color_model.dart';
 import 'package:daily_fans/models/date/price_model.dart';
-import 'package:daily_fans/services/date/send_date_to_contacts_service.dart';
 import 'package:daily_fans/views/dates/dates_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+enum SingingCharacter { lafayette, jefferson }
+
+extension HexColor on Color {
+  static Color fromHex(String hexString) {
+    final buffer = StringBuffer();
+    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+    buffer.write(hexString.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
+  }
+
+  /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
+  String toHex({bool leadingHashSign = true}) => '${leadingHashSign ? '#' : ''}'
+      '${alpha.toRadixString(16).padLeft(2, '0')}'
+      '${red.toRadixString(16).padLeft(2, '0')}'
+      '${green.toRadixString(16).padLeft(2, '0')}'
+      '${blue.toRadixString(16).padLeft(2, '0')}';
+}
 
 class DatesList extends GetView<DatesController> {
   const DatesList({Key? key}) : super(key: key);
@@ -22,23 +39,46 @@ class DatesList extends GetView<DatesController> {
           price: item['price'],
           partNumber: item['partNumber'],
           yearModel: item['yearModel'],
-          color: item['color'].toString(),
           hasGuarantee: item['hasGuarantee']);
-      List<Widget> gameCells = <Widget>[];
+      if (item['color'] != null) {
+        //TODO not nullable color
+        priceItem = PriceModel(
+            description: item['description'],
+            price: item['price'],
+            partNumber: item['partNumber'],
+            yearModel: item['yearModel'],
+            color: ColorType(
+                id: item['color']["id"],
+                title: item['color']["title"],
+                hex: item['color']["hex"]),
+            hasGuarantee: item['hasGuarantee']);
+      }
 
+      List<Widget> gameCells = <Widget>[];
       priceItem.toJson().forEach((final String key, final value) {
         if (value != null) {
           gameCells.add(Padding(
-            padding: EdgeInsets.only(left: 10, right: 10),
+            padding: const EdgeInsets.only(left: 10, right: 10),
             child: Card(
               child: ListTile(
                 // onTap: () => _showPriceListModal(),
                 leading: Text(
                   key.toString(),
                 ),
-                trailing: Text(
-                  value.toString(),
-                ),
+                trailing: key.toString() == 'color'
+                    ? Container(
+                        decoration: const BoxDecoration(
+                          // color: HexColor.fromHex(key["hex"]),
+                          color: Colors.blue,
+                          shape: BoxShape.circle,
+                        ),
+                        width: 20,
+                        height: 20,
+                        child: Text(''),
+                      )
+                    : Text(
+                        value.toString(),
+                      ),
               ),
             ),
           ));
@@ -48,15 +88,23 @@ class DatesList extends GetView<DatesController> {
     }
 
     void _showAddNewPriceListInModal(int dateId) {
+      List<int> colorsValues = [];
+      for (var item in controller.colors) {
+        colorsValues.add(item.id);
+      }
+      if (colorsValues.isNotEmpty) {
+        controller.changeSelectedColor(colorsValues[0]);
+      }
+
       controller.setPriceListId(dateId);
       showModalBottomSheet(
           isScrollControlled: true,
           context: context,
           builder: (context) {
             return Container(
-              color: Color.fromARGB(255, 59, 59, 59),
+              color: const Color.fromARGB(255, 59, 59, 59),
               // height: MediaQuery.of(context).size.height *
-              //     .5, //TODO after open keyboard
+              //     .65, //TODO after open keyboard
               child: Container(
                 decoration: BoxDecoration(
                     color: Theme.of(context).canvasColor,
@@ -65,6 +113,7 @@ class DatesList extends GetView<DatesController> {
                         topRight: Radius.circular(20))),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     const SizedBox(
                       height: 20,
@@ -83,6 +132,7 @@ class DatesList extends GetView<DatesController> {
                                 height: 15,
                               ),
                               TextFormField(
+                                autofocus: true,
                                 onChanged: (text) => controller
                                     .handleNewProductDetails('title', text),
                                 style: TextStyle(
@@ -91,7 +141,7 @@ class DatesList extends GetView<DatesController> {
                                         .button
                                         ?.fontSize),
                                 textInputAction: TextInputAction.next,
-                                controller: controller.titleController,
+                                // controller: controller.titleController,
                                 decoration: const InputDecoration(
                                   labelText: "Title",
                                 ),
@@ -118,6 +168,7 @@ class DatesList extends GetView<DatesController> {
                                 height: 15,
                               ),
                               TextFormField(
+                                keyboardType: TextInputType.number,
                                 onChanged: (text) => controller
                                     .handleNewProductDetails('price', text),
                                 style: TextStyle(
@@ -182,23 +233,6 @@ class DatesList extends GetView<DatesController> {
                               const SizedBox(
                                 height: 15,
                               ),
-                              // ColorPicker(
-                              //   pickerColor: Colors.red,
-                              //   onColorChanged: controller.toogleColor,
-                              //   colorPickerWidth: 300,
-                              //   pickerAreaHeightPercent: 0.7,
-                              //   // enableAlpha:
-                              //   //     _enableAlpha4, // hexInputController will respect it too.
-                              //   displayThumbColor: true,
-                              //   paletteType: PaletteType.hueWheel,
-                              //   labelTypes: const [],
-                              //   pickerAreaBorderRadius: const BorderRadius.only(
-                              //     topLeft: Radius.circular(2),
-                              //     topRight: Radius.circular(2),
-                              //   ),
-                              //   // hexInputController: textController, // <- here
-                              //   portraitOnly: true,
-                              // ),
                               Container(
                                 height: 50,
                                 // color: Colors.red,
@@ -224,7 +258,8 @@ class DatesList extends GetView<DatesController> {
                                     const Text(
                                       'Has guarantee',
                                       style: TextStyle(
-                                        color: Color.fromARGB(255, 77, 75, 75),
+                                        color:
+                                            Color.fromARGB(255, 110, 107, 107),
                                         fontSize: 16,
                                       ),
                                     ),
@@ -243,11 +278,8 @@ class DatesList extends GetView<DatesController> {
                                 height: 15,
                               ),
                               Container(
-                                height: 50,
-                                // color: Colors.red,
                                 padding:
                                     const EdgeInsets.only(left: 10, right: 10),
-                                // alignment: ,
                                 decoration: BoxDecoration(
                                   color: Theme.of(context).canvasColor,
                                   // color: Colors.red,
@@ -260,94 +292,55 @@ class DatesList extends GetView<DatesController> {
                                     width: 1,
                                   ),
                                 ),
-
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      'Color',
-                                      style: TextStyle(
-                                        color: Color.fromARGB(255, 77, 75, 75),
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    Wrap(
-                                      runSpacing: 3.0,
-                                      spacing: 3.0,
+                                child: Container(
+                                  // color: Colors.red,
+                                  child: Obx(
+                                    () => Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            controller.selectColor(2);
-                                          },
-                                          child: Text('Button'),
-                                          style: ElevatedButton.styleFrom(
-                                            shape: CircleBorder(),
-                                            padding: EdgeInsets.all(24),
-                                            primary: Colors.black,
-                                            minimumSize: const Size(20, 20),
-                                            maximumSize: const Size(30, 30),
+                                        const Text(
+                                          'Color',
+                                          style: TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 110, 107, 107),
+                                            fontSize: 16,
                                           ),
                                         ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            controller.selectColor(3);
-                                          },
-                                          child: Text('Button'),
-                                          style: ElevatedButton.styleFrom(
-                                            shape: CircleBorder(),
-                                            padding: EdgeInsets.all(24),
-                                            primary: Colors.blue,
-                                            minimumSize: const Size(20, 20),
-                                            maximumSize: const Size(30, 30),
-                                          ),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            controller.selectColor(4);
-                                          },
-                                          child: Text('Button'),
-                                          style: ElevatedButton.styleFrom(
-                                            shape: CircleBorder(),
-                                            padding: EdgeInsets.all(24),
-                                            primary:
-                                                Color.fromARGB(255, 12, 50, 82),
-                                            minimumSize: const Size(20, 20),
-                                            maximumSize: const Size(30, 30),
-                                          ),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            controller.selectColor(1);
-                                          },
-                                          child: Text('Button'),
-                                          style: ElevatedButton.styleFrom(
-                                            shape: CircleBorder(),
-                                            padding: EdgeInsets.all(24),
-                                            primary: Colors.white,
-                                            minimumSize: const Size(20, 20),
-                                            maximumSize: const Size(30, 30),
-                                          ),
+                                        Row(
+                                          children: controller.colors
+                                              .map(
+                                                (color) => Radio<int>(
+                                                  fillColor: MaterialStateColor
+                                                      .resolveWith((states) =>
+                                                          HexColor.fromHex(
+                                                              color.hex)),
+                                                  // activeColor: Colors.red,
+                                                  value: color.id,
+                                                  groupValue: controller
+                                                      .selectedColorValue.value,
+                                                  onChanged: (val) {
+                                                    controller
+                                                        .changeSelectedColor(
+                                                            val!);
+                                                  },
+                                                ),
+                                              )
+                                              .toList(),
                                         ),
                                       ],
-                                    )
-                                  ],
+                                    ),
+                                  ),
                                 ),
                               ),
-                              // const SizedBox(
-                              //   height: 15,
-                              // ),
+                              const SizedBox(
+                                height: 15,
+                              ),
                               SizedBox(
                                 width: double.infinity,
                                 height: 55,
                                 child: ElevatedButton(
                                   onPressed: () async {
-                                    // if (controller.formKey.currentState == null ||
-                                    //     !controller.formKey.currentState!.validate())
-                                    //   return;
-                                    // await controller.login();
-                                    // Get.toNamed(DatesView.route());
-
                                     var res =
                                         await controller.addNewProductDetails();
                                     if (res != null) {
@@ -359,14 +352,14 @@ class DatesList extends GetView<DatesController> {
                                   child: const Text('Submit'),
                                 ),
                               ),
+                              const SizedBox(
+                                height: 20,
+                              ),
                             ],
                           ),
                         ),
                       ),
                     ),
-                    // const SizedBox(
-                    //   height: 24,
-                    // ),
                   ],
                 ),
               ),
@@ -375,10 +368,11 @@ class DatesList extends GetView<DatesController> {
     }
 
     void _showPriceListModal(int dateId) {
-      ScrollController _scrollController = new ScrollController();
+      ScrollController _scrollController = ScrollController();
       controller.emptyPriceList();
       controller.getPriceListByDate(dateId);
       showModalBottomSheet(
+
           // backgroundColor: Colors.red,
           isScrollControlled: true,
           context: context,
@@ -386,9 +380,9 @@ class DatesList extends GetView<DatesController> {
             return Obx(
               () => Container(
                 color: const Color(0xFF737373),
-                height: controller.prices.length > 0
+                height: controller.prices.isNotEmpty
                     ? MediaQuery.of(context).size.height * .7
-                    : MediaQuery.of(context).size.height * .10,
+                    : MediaQuery.of(context).size.height * .5,
                 child: Container(
                   decoration: BoxDecoration(
                       color: Theme.of(context).canvasColor,
@@ -397,7 +391,7 @@ class DatesList extends GetView<DatesController> {
                           topRight: Radius.circular(20))),
                   child: Column(
                     children: [
-                      if (controller.prices.length > 0)
+                      if (controller.prices.isNotEmpty)
                         IconButton(
                           onPressed: () {
                             _scrollController.animateTo(
@@ -407,7 +401,7 @@ class DatesList extends GetView<DatesController> {
                             );
                           },
                           color: Theme.of(context).primaryColor,
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.arrow_drop_down_sharp,
                             size: 60,
                           ),
@@ -416,12 +410,9 @@ class DatesList extends GetView<DatesController> {
                         height: 20,
                       ),
                       Container(
-                        height: controller.prices.length > 0
+                        height: controller.prices.isEmpty
                             ? MediaQuery.of(context).size.height * .55
                             : MediaQuery.of(context).size.height * 0,
-                        // height: controller.prices.length > 0
-                        //     ? MediaQuery.of(context).size.height * .6
-                        //     : MediaQuery.of(context).size.height * .1,
                         child: ListView(
                           shrinkWrap: true,
                           controller: _scrollController,
@@ -453,7 +444,6 @@ class DatesList extends GetView<DatesController> {
                                             ),
                                           ],
                                         );
-                                        // return Text(date);
                                       }).toList(),
                                     ),
                                   )
@@ -464,9 +454,9 @@ class DatesList extends GetView<DatesController> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 20),
+                        padding: const EdgeInsets.only(right: 20),
                         child: Align(
-                          alignment: Alignment.bottomLeft,
+                          alignment: Alignment.centerRight,
                           child: FloatingActionButton(
                             onPressed: () =>
                                 _showAddNewPriceListInModal(dateId),
@@ -487,14 +477,6 @@ class DatesList extends GetView<DatesController> {
           });
     }
 
-    void _onSubmit() {
-      // setState(() => _isLoading = true);
-      Future.delayed(
-        const Duration(seconds: 2),
-        // () => setState(() => _isLoading = false),
-      );
-    }
-
     return SizedBox(
       height: MediaQuery.of(context).size.height * .7, //TODO
       child: ListView(
@@ -507,29 +489,27 @@ class DatesList extends GetView<DatesController> {
               children: [
                 Obx(() => SingleChildScrollView(
                       child: Column(
-                        children: controller.dates.asMap().entries.map((user) {
-                          int idx = user.key + 1;
-                          // String val = user.value;
+                        children: controller.dates.asMap().entries.map((date) {
+                          int idx = date.key + 1;
+                          // String val = date.value;
                           return Card(
                             child: ListTile(
                               onTap: () =>
-                                  _showPriceListModal(user.value['id']),
+                                  _showPriceListModal(date.value['id']),
                               title: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    user.value['dateTime'].toString(),
+                                    date.value['dateTime'].toString(),
                                   ),
                                   Text(
-                                    user.value['title'].toString(),
+                                    date.value['title'].toString(),
                                   ),
                                 ],
                               ),
                               leading: Text(
                                 idx.toString(),
-                                // style: const TextStyle(
-                                //     color: Colors.red, fontSize: 16),
                               ),
                               trailing: IconButton(
                                 icon: utilsController.skeletonLoading.isTrue
@@ -545,8 +525,10 @@ class DatesList extends GetView<DatesController> {
                                         color: Theme.of(context).primaryColor,
                                       ),
                                 color: Theme.of(context).primaryColor,
-                                onPressed: () => utilsController
-                                    .toggleSkeletonLoadingState(), //TODO
+                                onPressed: () => controller
+                                    .sendDatesToContacts(date.value['id']),
+                                // utilsController.toggleSkeletonLoadingState(
+                                //     true), //TODO
                                 iconSize: 25,
                               ),
                             ),

@@ -13,7 +13,10 @@ PriceModel _$PriceModelFromJson(Map<String, dynamic> json) => PriceModel(
       price: json['price'] as int?,
       partNumber: json['partNumber'] as String?,
       yearModel: json['yearModel'] as int?,
-      color: json['color'] as String?,
+      colorId: json['colorId'] as int?,
+      color: json['color'] == null
+          ? null
+          : ColorType.fromJson(json['color'] as Map<String, dynamic>),
       hasGuarantee: json['hasGuarantee'] as bool?,
       priceListId: json['priceListId'] as int?,
     );
@@ -26,6 +29,7 @@ Map<String, dynamic> _$PriceModelToJson(PriceModel instance) =>
       'price': instance.price,
       'partNumber': instance.partNumber,
       'yearModel': instance.yearModel,
+      'colorId': instance.colorId,
       'color': instance.color,
       'hasGuarantee': instance.hasGuarantee,
       'priceListId': instance.priceListId,

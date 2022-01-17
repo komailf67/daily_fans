@@ -1,3 +1,4 @@
+import 'package:daily_fans/globalControllers/util_controller.dart';
 import 'package:daily_fans/views/dates/dates_controller.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,8 @@ class AddNewDate extends GetView<DatesController> {
 
   @override
   Widget build(BuildContext context) {
+    var utils = Get.find<UtilController>();
+
     void showAddNewDateModal() {
       showModalBottomSheet(
           isScrollControlled: true,
@@ -43,6 +46,7 @@ class AddNewDate extends GetView<DatesController> {
                                 height: 15,
                               ),
                               TextFormField(
+                                autofocus: true,
                                 style: TextStyle(
                                     fontSize: Theme.of(context)
                                         .textTheme
@@ -65,7 +69,7 @@ class AddNewDate extends GetView<DatesController> {
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter.allow(
                                             RegExp(r'[۱۲۳۴۵۶۷۸۹۰0-9]')),
-                                        LengthLimitingTextInputFormatter(2),
+                                        LengthLimitingTextInputFormatter(4),
                                       ],
                                       style: TextStyle(
                                           fontSize: Theme.of(context)
@@ -148,7 +152,19 @@ class AddNewDate extends GetView<DatesController> {
                                       Navigator.pop(context);
                                     }
                                   },
-                                  child: const Text('Submit'),
+                                  child: Obx(
+                                    //TODO: button kit with loading
+                                    () => utils.skeletonLoading.value
+                                        ? const CircularProgressIndicator(
+                                            color: Colors.white,
+                                          )
+                                        : const Text(
+                                            'Submit',
+                                            style: TextStyle(
+                                                fontSize:
+                                                    18), //font size from theme
+                                          ),
+                                  ),
                                 ),
                               ),
                             ],

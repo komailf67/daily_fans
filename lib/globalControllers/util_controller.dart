@@ -29,8 +29,8 @@ class UtilController extends GetxController {
     Get.toNamed(LoginView.route());
   }
 
-  void toggleSkeletonLoadingState() {
-    skeletonLoading.value = !skeletonLoading.value;
+  void toggleSkeletonLoadingState(bool state) {
+    skeletonLoading.value = state;
   }
 
   Widget customLoading() {

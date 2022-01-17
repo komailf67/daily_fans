@@ -37,7 +37,7 @@ class ServiceHelper {
         this.showAlert = showAlert ?? true;
 
   Future call() async {
-    _addLoader();
+    _addLoader(methodEnum);
     try {
       var options = await _getOptions();
       switch (methodEnum) {
@@ -127,9 +127,12 @@ class ServiceHelper {
     util.authStatus.value = AuthEnum.NotAuthorized;
   }
 
-  void _addLoader() {
+  void _addLoader(methodEnum) {
     if (loaderType == LoaderType.None) return;
     var util = _getController();
+    if (methodEnum == HttpMethodEnum.POST) {
+      util.toggleSkeletonLoadingState(true);
+    }
     if (loaderType == LoaderType.Action) util.actionLoader.add(url);
     if (loaderType == LoaderType.Skeleton) util.skeletonLoader.add(url);
   }
@@ -137,6 +140,7 @@ class ServiceHelper {
   void _removeLoader() {
     if (loaderType == LoaderType.None) return;
     var util = _getController();
+    util.toggleSkeletonLoadingState(false);
     if (loaderType == LoaderType.Action) util.actionLoader.remove(url);
     if (loaderType == LoaderType.Skeleton) util.skeletonLoader.remove(url);
   }

@@ -20,8 +20,8 @@ class Sort extends GetView<DatesController> {
         child: IconButton(
           icon: Icon(
             controller.descending.isTrue
-                ? Icons.arrow_downward
-                : Icons.arrow_upward,
+                ? Icons.arrow_circle_down
+                : Icons.arrow_circle_up,
             color: Theme.of(context).primaryColor,
           ),
           color: Theme.of(context).primaryColor,

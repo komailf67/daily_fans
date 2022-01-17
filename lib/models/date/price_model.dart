@@ -1,3 +1,4 @@
+import 'package:daily_fans/models/color/color_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'price_model.g.dart';
@@ -10,7 +11,8 @@ class PriceModel {
   int? price;
   String? partNumber;
   int? yearModel;
-  String? color;
+  int? colorId;
+  ColorType? color;
   bool? hasGuarantee;
   int? priceListId;
 
@@ -21,6 +23,7 @@ class PriceModel {
     this.price,
     this.partNumber,
     this.yearModel,
+    this.colorId,
     this.color,
     this.hasGuarantee,
     this.priceListId,

@@ -30,7 +30,7 @@ class SendDatesToContactResponse extends MainResponse {
 Future<SendDatesToContactResponse?> sendDatesToContactsService(
     SendDatesToContactRequest request) async {
   var service = ServiceHelper(
-      url: "/PriceList/sendMessage/${request.priceListId}",
+      url: "/PriceList/sendMessage?priceListId=${request.priceListId}",
       methodEnum: HttpMethodEnum.POST,
       loaderType: LoaderType.Action,
       // request: request.toJson(),
