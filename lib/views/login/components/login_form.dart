@@ -154,8 +154,12 @@ class LoginForm extends GetView<LoginController> {
                   child: Obx(
                     //TODO: button kit with loading
                     () => utils.skeletonLoading.value
-                        ? const CircularProgressIndicator(
-                            color: Colors.white,
+                        ? const SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
                           )
                         : const Text(
                             'Sign in',

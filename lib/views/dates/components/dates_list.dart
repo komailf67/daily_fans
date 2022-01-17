@@ -1,12 +1,14 @@
 import 'package:daily_fans/globalControllers/util_controller.dart';
 import 'package:daily_fans/models/color/color_model.dart';
 import 'package:daily_fans/models/date/price_model.dart';
+import 'package:daily_fans/views/common/no_data.dart';
 import 'package:daily_fans/views/dates/dates_controller.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:math' as math;
 
 enum SingingCharacter { lafayette, jefferson }
 
@@ -389,88 +391,75 @@ class DatesList extends GetView<DatesController> {
                       borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(20),
                           topRight: Radius.circular(20))),
-                  child: Column(
-                    children: [
-                      if (controller.prices.isNotEmpty)
-                        IconButton(
-                          onPressed: () {
-                            _scrollController.animateTo(
-                              _scrollController.position.maxScrollExtent,
-                              curve: Curves.easeOut,
-                              duration: const Duration(milliseconds: 500),
-                            );
-                          },
-                          color: Theme.of(context).primaryColor,
-                          icon: const Icon(
-                            Icons.arrow_drop_down_sharp,
-                            size: 60,
-                          ),
-                        ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        height: controller.prices.isEmpty
-                            ? MediaQuery.of(context).size.height * .55
-                            : MediaQuery.of(context).size.height * 0,
-                        child: ListView(
-                          shrinkWrap: true,
-                          controller: _scrollController,
+                  child: controller.getPriceListLoading.isFalse &&
+                          controller.prices.isEmpty
+                      ? Column(
                           children: [
-                            Container(
-                              padding: const EdgeInsets.only(left: 5, right: 5),
-                              child: Column(
+                            CloseModal(context),
+                            buildPadding(
+                                _showAddNewPriceListInModal, dateId, context),
+                            SizedBox(
+                              height: 50,
+                            ),
+                            NoData(),
+                          ],
+                        )
+                      : Column(
+                          children: [
+                            // if (controller.prices.isNotEmpty)
+                            CloseModal(context),
+                            buildPadding(
+                                _showAddNewPriceListInModal, dateId, context),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            SizedBox(
+                              height: controller.prices.isNotEmpty
+                                  ? MediaQuery.of(context).size.height * .55
+                                  : MediaQuery.of(context).size.height * 0,
+                              child: ListView(
+                                shrinkWrap: true,
+                                controller: _scrollController,
                                 children: [
                                   Container(
+                                    padding: const EdgeInsets.only(
+                                        left: 5, right: 5),
                                     child: Column(
-                                      children: controller.prices
-                                          .asMap()
-                                          .entries
-                                          .map((item) {
-                                        int idx = item.key + 1;
-                                        // String val = user.value;
-                                        return ExpansionTile(
-                                          title: Text(
-                                            item.value['title'],
-                                          ),
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 10, right: 10),
-                                              child: Column(
-                                                children: renderSingleCollapse(
-                                                    item.value),
+                                      children: [
+                                        Column(
+                                          children: controller.prices
+                                              .asMap()
+                                              .entries
+                                              .map((item) {
+                                            int idx = item.key + 1;
+                                            // String val = user.value;
+                                            return ExpansionTile(
+                                              title: Text(
+                                                item.value['title'],
                                               ),
-                                            ),
-                                          ],
-                                        );
-                                      }).toList(),
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 10, right: 10),
+                                                  child: Column(
+                                                    children:
+                                                        renderSingleCollapse(
+                                                            item.value),
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ],
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
                           ],
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20),
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: FloatingActionButton(
-                            onPressed: () =>
-                                _showAddNewPriceListInModal(dateId),
-                            backgroundColor: Theme.of(context).primaryColor,
-                            child: const Icon(
-                              Icons.add,
-                              size: 30,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
               ),
             );
@@ -541,6 +530,60 @@ class DatesList extends GetView<DatesController> {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  Transform CloseModal(BuildContext context) {
+    return Transform.rotate(
+      angle: 45 * math.pi / 90,
+      child: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        color: Theme.of(context).primaryColor,
+        icon: const Icon(
+          Icons.arrow_forward_ios,
+          size: 25,
+        ),
+      ),
+    );
+  }
+
+  Padding buildPadding(void _showAddNewPriceListInModal(int dateId), int dateId,
+      BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 15),
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: SizedBox(
+          width: 65,
+          height: 30,
+          child: ButtonTheme(
+            // minWidth: 200.0,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
+                side: BorderSide(color: Colors.green)),
+            child: RaisedButton(
+                elevation: 0.0,
+                color: Theme.of(context).primaryColor,
+                child: Text(
+                  "Add",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+                onPressed: () => _showAddNewPriceListInModal(dateId)),
+          ),
+          //     FloatingActionButton(
+          //   shape: BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+          //   onPressed: () => _showAddNewPriceListInModal(dateId),
+          //   backgroundColor: Theme.of(context).primaryColor,
+          //   child: Text(
+          //     'Add',
+          //     style: TextStyle(color: Colors.white, fontSize: 14),
+          //   ),
+          // ),
+        ),
       ),
     );
   }

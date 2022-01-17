@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:daily_fans/bindings/initial_binding.dart';
 import 'package:daily_fans/middlewares/anti_auth_middleware.dart';
 import 'package:daily_fans/theme/deafult_theme.dart';
@@ -8,6 +6,7 @@ import 'package:daily_fans/views/dates/dates_view.dart';
 import 'package:daily_fans/views/login/login_binding.dart';
 import 'package:daily_fans/views/login/login_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
@@ -40,6 +39,7 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.light,
       initialRoute: LoginView.route(),
       initialBinding: InitialBinding(),
+      builder: EasyLoading.init(),
       getPages: [
         GetPage(
           name: LoginView.route(),

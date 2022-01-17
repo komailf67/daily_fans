@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:daily_fans/models/color/color_model.dart';
 import 'package:daily_fans/models/date/price_model.dart';
 import 'package:daily_fans/services/color/get_colors_list_service.dart';
@@ -12,9 +10,10 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:shamsi_date/shamsi_date.dart';
 
+enum DatesLoadings { getDates, getPrices }
+
 class DatesController extends GetxController {
   Jalali now = Jalali.now();
-
   // DatesController({this.now});
   // Jalali? now;
   final formKey = GlobalKey<FormState>();
@@ -49,6 +48,8 @@ class DatesController extends GetxController {
   var descending = true.obs;
   var pickerColor = Color(0xff443a49).obs;
   RxBool hasGuarantee = true.obs;
+  RxBool getDatesListLoading = false.obs;
+  RxBool getPriceListLoading = false.obs;
 
   void changeSelectedColor(int colorValue) {
     print('colorValue');
@@ -230,5 +231,20 @@ class DatesController extends GetxController {
   Future sendDatesToContacts(int priceListId) async {
     var req = SendDatesToContactRequest(priceListId: priceListId);
     return await sendDatesToContactsService(req);
+  }
+
+  void toggleLoading(loadingName, bool state) {
+    switch (loadingName) {
+      case DatesLoadings.getDates:
+        getDatesListLoading.value = state;
+        break;
+      case DatesLoadings.getPrices:
+        getPriceListLoading.value = state;
+        break;
+      default:
+    }
+    // if (loadingName == DatesLoadings.getDates) {
+    //   getPriceListLoading.value = state;
+    // }
   }
 }

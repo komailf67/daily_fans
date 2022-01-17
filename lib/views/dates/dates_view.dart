@@ -1,11 +1,13 @@
+import 'package:daily_fans/views/common/no_data.dart';
 import 'package:daily_fans/views/dates/components/add_new_date.dart';
 import 'package:daily_fans/views/dates/components/dates_list.dart';
 import 'package:daily_fans/views/dates/components/profile_button.dart';
 import 'package:daily_fans/views/dates/components/sort.dart';
+import 'package:daily_fans/views/dates/dates_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class DatesView extends GetView {
+class DatesView extends GetView<DatesController> {
   const DatesView({Key? key}) : super(key: key);
   static String route() => '/dates';
   @override
@@ -40,7 +42,13 @@ class DatesView extends GetView {
                 const SizedBox(
                   height: 5,
                 ),
-                const DatesList(),
+                Obx(
+                  () => controller.getDatesListLoading.isFalse &&
+                          controller.dates.isEmpty
+                      ? const NoData()
+                      : const DatesList(),
+                ),
+                // const DatesList(),
               ],
             ),
           ),

@@ -3,6 +3,7 @@ import 'package:daily_fans/globalControllers/util_controller.dart';
 import 'package:daily_fans/theme/theme_constants.dart';
 import 'package:daily_fans/utils/storage.dart';
 import 'package:dio/dio.dart' as Dio;
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import '../main.dart';
 import 'base_url.dart';
@@ -132,7 +133,13 @@ class ServiceHelper {
     var util = _getController();
     if (methodEnum == HttpMethodEnum.POST) {
       util.toggleSkeletonLoadingState(true);
+    } else if (methodEnum == HttpMethodEnum.GET) {
+      EasyLoading.show(
+        status: 'loading...',
+        maskType: EasyLoadingMaskType.black,
+      );
     }
+    ;
     if (loaderType == LoaderType.Action) util.actionLoader.add(url);
     if (loaderType == LoaderType.Skeleton) util.skeletonLoader.add(url);
   }
@@ -141,6 +148,7 @@ class ServiceHelper {
     if (loaderType == LoaderType.None) return;
     var util = _getController();
     util.toggleSkeletonLoadingState(false);
+    EasyLoading.dismiss();
     if (loaderType == LoaderType.Action) util.actionLoader.remove(url);
     if (loaderType == LoaderType.Skeleton) util.skeletonLoader.remove(url);
   }
