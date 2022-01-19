@@ -23,16 +23,17 @@ class DatesController extends GetxController {
       TextEditingController(text: now.month.toString());
   late final yearController = TextEditingController(text: now.year.toString());
 
-  Rx<PriceModel> productDetails = PriceModel(
-          title: '',
-          description: '',
-          price: 0,
-          partNumber: '',
-          yearModel: 0,
-          colorId: 0,
-          hasGuarantee: false,
-          priceListId: 0)
-      .obs;
+  // Rx<PriceModel> productDetails = PriceModel(
+  //         title: '',
+  //         description: '',
+  //         price: 0,
+  //         partNumber: '',
+  //         yearModel: 0,
+  //         colorId: 0,
+  //         hasGuarantee: false,
+  //         priceListId: 0)
+  //     .obs;
+  Rx<PriceModel> productDetails = PriceModel().obs;
   RxInt selectedColorValue = 0.obs;
   List dates = [].obs;
   List prices = [].obs;
