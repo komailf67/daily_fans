@@ -293,6 +293,7 @@ class DatesList extends GetView<DatesController> {
                                   ),
                                 ),
                                 child: Container(
+                                  constraints: BoxConstraints(minHeight: 50),
                                   // color: Colors.red,
                                   child: Obx(
                                     () => Row(
