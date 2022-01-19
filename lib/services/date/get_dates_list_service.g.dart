@@ -17,7 +17,7 @@ GetDatesListResponse _$GetDatesListResponseFromJson(
         Map<String, dynamic> json) =>
     GetDatesListResponse(
       (json['data'] as List<dynamic>?)
-          ?.map((e) => e as Map<String, dynamic>)
+          ?.map((e) => DateModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     )
       ..message = json['message'] as String?

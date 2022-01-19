@@ -1,3 +1,4 @@
+import 'package:daily_fans/models/date/date_model.dart';
 import 'package:daily_fans/models/main_response_model.dart';
 import 'package:daily_fans/utils/base_url.dart';
 import 'package:daily_fans/utils/service_helper.dart';
@@ -19,7 +20,7 @@ class GetDatesListRequest {
 
 @JsonSerializable()
 class GetDatesListResponse extends MainResponse {
-  List<Map<String, dynamic>>? data; //TODO note
+  List<DateModel>? data;
 
   GetDatesListResponse(this.data) : super('', 0);
 

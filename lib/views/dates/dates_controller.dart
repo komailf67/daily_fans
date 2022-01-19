@@ -1,4 +1,5 @@
 import 'package:daily_fans/models/color/color_model.dart';
+import 'package:daily_fans/models/date/loading_date_model.dart';
 import 'package:daily_fans/models/date/price_model.dart';
 import 'package:daily_fans/services/color/get_colors_list_service.dart';
 import 'package:daily_fans/services/date/add_new_date_service.dart';
@@ -23,19 +24,9 @@ class DatesController extends GetxController {
       TextEditingController(text: now.month.toString());
   late final yearController = TextEditingController(text: now.year.toString());
 
-  // Rx<PriceModel> productDetails = PriceModel(
-  //         title: '',
-  //         description: '',
-  //         price: 0,
-  //         partNumber: '',
-  //         yearModel: 0,
-  //         colorId: 0,
-  //         hasGuarantee: false,
-  //         priceListId: 0)
-  //     .obs;
   Rx<PriceModel> productDetails = PriceModel().obs;
   RxInt selectedColorValue = 0.obs;
-  List dates = [].obs;
+  RxList<LoadingDateModel> dates = <LoadingDateModel>[].obs;
   List prices = [].obs;
   List<ColorType> colors =
       [ColorType(id: 0, title: '', hex: '')].obs; //TODO initial value
@@ -144,11 +135,22 @@ class DatesController extends GetxController {
   }
 
   Future getDatesList() async {
-    var res = await getDatesListService(descending.value ? 'dsc' : 'asc');
+    GetDatesListResponse? res =
+        await getDatesListService(descending.value ? 'dsc' : 'asc');
     if (res == null) return;
     emptyDatesList();
-    for (var key in res!.data!) {
-      dates.add(key);
+
+    for (var key in res.data!) {
+      dates.add(
+        LoadingDateModel(
+          id: key.id,
+          title: key.title,
+          description: key.description,
+          dateTime: key.dateTime,
+          userId: key.userId,
+          loading: false,
+        ),
+      );
     }
   }
 
@@ -229,9 +231,9 @@ class DatesController extends GetxController {
     return res;
   }
 
-  Future sendDatesToContacts(int priceListId) async {
+  Future sendDatesToContacts(int priceListId, int index) async {
     var req = SendDatesToContactRequest(priceListId: priceListId);
-    return await sendDatesToContactsService(req);
+    return await sendDatesToContactsService(req, index);
   }
 
   void toggleLoading(loadingName, bool state) {
@@ -247,5 +249,11 @@ class DatesController extends GetxController {
     // if (loadingName == DatesLoadings.getDates) {
     //   getPriceListLoading.value = state;
     // }
+  }
+
+  void toggleShareLoading(int index, state) {
+    var selectedDate = dates[index];
+    selectedDate.loading = state;
+    dates[index] = selectedDate;
   }
 }

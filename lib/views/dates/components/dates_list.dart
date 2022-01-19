@@ -33,8 +33,6 @@ class DatesList extends GetView<DatesController> {
 
   @override
   Widget build(BuildContext context) {
-    var utilsController = Get.find<UtilController>();
-
     List<Widget> renderSingleCollapse(item) {
       var priceItem = PriceModel(
           description: item['description'],
@@ -395,7 +393,7 @@ class DatesList extends GetView<DatesController> {
                           controller.prices.isEmpty
                       ? Column(
                           children: [
-                            CloseModal(context),
+                            closeModal(context),
                             buildPadding(
                                 _showAddNewPriceListInModal, dateId, context),
                             SizedBox(
@@ -407,7 +405,7 @@ class DatesList extends GetView<DatesController> {
                       : Column(
                           children: [
                             // if (controller.prices.isNotEmpty)
-                            CloseModal(context),
+                            closeModal(context),
                             buildPadding(
                                 _showAddNewPriceListInModal, dateId, context),
                             const SizedBox(
@@ -483,17 +481,16 @@ class DatesList extends GetView<DatesController> {
                           // String val = date.value;
                           return Card(
                             child: ListTile(
-                              onTap: () =>
-                                  _showPriceListModal(date.value['id']),
+                              onTap: () => _showPriceListModal(date.value.id!),
                               title: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    date.value['dateTime'].toString(),
+                                    date.value.dateTime.toString(),
                                   ),
                                   Text(
-                                    date.value['title'].toString(),
+                                    date.value.title.toString(),
                                   ),
                                 ],
                               ),
@@ -501,7 +498,7 @@ class DatesList extends GetView<DatesController> {
                                 idx.toString(),
                               ),
                               trailing: IconButton(
-                                icon: utilsController.skeletonLoading.isTrue
+                                icon: controller.dates[date.key].loading
                                     ? SizedBox(
                                         height: 15,
                                         child: CircularProgressIndicator(
@@ -514,10 +511,10 @@ class DatesList extends GetView<DatesController> {
                                         color: Theme.of(context).primaryColor,
                                       ),
                                 color: Theme.of(context).primaryColor,
-                                onPressed: () => controller
-                                    .sendDatesToContacts(date.value['id']),
-                                // utilsController.toggleSkeletonLoadingState(
-                                //     true), //TODO
+                                onPressed: () => controller.sendDatesToContacts(
+                                  date.value.id!,
+                                  date.key,
+                                ),
                                 iconSize: 25,
                               ),
                             ),
@@ -534,7 +531,7 @@ class DatesList extends GetView<DatesController> {
     );
   }
 
-  Transform CloseModal(BuildContext context) {
+  Transform closeModal(BuildContext context) {
     return Transform.rotate(
       angle: 45 * math.pi / 90,
       child: IconButton(
