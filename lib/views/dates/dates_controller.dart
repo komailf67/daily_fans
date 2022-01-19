@@ -27,9 +27,8 @@ class DatesController extends GetxController {
   Rx<PriceModel> productDetails = PriceModel().obs;
   RxInt selectedColorValue = 0.obs;
   RxList<LoadingDateModel> dates = <LoadingDateModel>[].obs;
-  List prices = [].obs;
-  List<ColorType> colors =
-      [ColorType(id: 0, title: '', hex: '')].obs; //TODO initial value
+  RxList<PriceModel> prices = <PriceModel>[].obs;
+  RxList<ColorType> colors = <ColorType>[].obs;
 
   @override
   void onReady() {
@@ -38,19 +37,13 @@ class DatesController extends GetxController {
   }
 
   var descending = true.obs;
-  var pickerColor = Color(0xff443a49).obs;
   RxBool hasGuarantee = true.obs;
   RxBool getDatesListLoading = false.obs;
   RxBool getPriceListLoading = false.obs;
 
   void changeSelectedColor(int colorValue) {
-    print('colorValue');
-
-    print(selectedColorValue.value);
-    // print(colorValue);
     selectedColorValue.value = colorValue;
     productDetails.value.colorId = colorValue;
-    print(selectedColorValue.value);
   }
 
   void validateNewProductDetails() {
@@ -185,9 +178,24 @@ class DatesController extends GetxController {
   Future getPriceListByDate(int dateId) async {
     try {
       emptyPriceList();
-      var res = await getPricesListByDateService(dateId);
-      for (var key in res!.data) {
-        prices.add(key);
+      GetPricesListByDateServiceResponse? res =
+          await getPricesListByDateService(dateId);
+      if (res == null) return;
+
+      for (var key in res.data!) {
+        prices.add(
+          PriceModel(
+            id: key.id,
+            title: key.title,
+            description: key.description,
+            price: key.price,
+            partNumber: key.partNumber,
+            yearModel: key.yearModel,
+            color: key.color,
+            hasGuarantee: key.hasGuarantee,
+            priceListId: key.priceListId,
+          ),
+        );
       }
     } catch (e) {
       print('errrrrrrrrrrrrrrrrrr');

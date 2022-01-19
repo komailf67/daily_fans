@@ -21,8 +21,8 @@ Map<String, dynamic> _$GetPricesListByDateServiceRequestToJson(
 GetPricesListByDateServiceResponse _$GetPricesListByDateServiceResponseFromJson(
         Map<String, dynamic> json) =>
     GetPricesListByDateServiceResponse(
-      (json['data'] as List<dynamic>)
-          .map((e) => e as Map<String, dynamic>)
+      (json['data'] as List<dynamic>?)
+          ?.map((e) => PriceModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     )
       ..message = json['message'] as String?

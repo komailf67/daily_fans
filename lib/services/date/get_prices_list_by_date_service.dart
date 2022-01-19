@@ -1,3 +1,4 @@
+import 'package:daily_fans/models/date/price_model.dart';
 import 'package:daily_fans/models/main_response_model.dart';
 import 'package:daily_fans/utils/base_url.dart';
 import 'package:daily_fans/utils/service_helper.dart';
@@ -23,7 +24,7 @@ class GetPricesListByDateServiceRequest {
 
 @JsonSerializable()
 class GetPricesListByDateServiceResponse extends MainResponse {
-  List<Map<String, dynamic>> data;
+  List<PriceModel>? data;
 
   GetPricesListByDateServiceResponse(this.data) : super('', 0); //TODO: 0
 

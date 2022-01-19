@@ -33,55 +33,45 @@ class DatesList extends GetView<DatesController> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> renderSingleCollapse(item) {
-      var priceItem = PriceModel(
-          description: item['description'],
-          price: item['price'],
-          partNumber: item['partNumber'],
-          yearModel: item['yearModel'],
-          hasGuarantee: item['hasGuarantee']);
-      if (item['color'] != null) {
-        //TODO not nullable color
-        priceItem = PriceModel(
-            description: item['description'],
-            price: item['price'],
-            partNumber: item['partNumber'],
-            yearModel: item['yearModel'],
-            color: ColorType(
-                id: item['color']["id"],
-                title: item['color']["title"],
-                hex: item['color']["hex"]),
-            hasGuarantee: item['hasGuarantee']);
-      }
+    List<Widget> renderSingleCollapse(PriceModel item) {
+      PriceModel priceItem = PriceModel(
+        description: item.description,
+        price: item.price,
+        partNumber: item.partNumber,
+        yearModel: item.yearModel,
+        color: ColorType(
+            id: item.color!.id, title: item.color!.title, hex: item.color!.hex),
+        hasGuarantee: item.hasGuarantee,
+      );
 
       List<Widget> gameCells = <Widget>[];
       priceItem.toJson().forEach((final String key, final value) {
         if (value != null) {
-          gameCells.add(Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10),
-            child: Card(
-              child: ListTile(
-                // onTap: () => _showPriceListModal(),
-                leading: Text(
-                  key.toString(),
-                ),
-                trailing: key.toString() == 'color'
-                    ? Container(
-                        decoration: const BoxDecoration(
-                          // color: HexColor.fromHex(key["hex"]),
-                          color: Colors.blue,
-                          shape: BoxShape.circle,
+          gameCells.add(
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: Card(
+                child: ListTile(
+                  // onTap: () => _showPriceListModal(),
+                  leading: Text(
+                    key.toString(),
+                  ),
+                  trailing: value is ColorType
+                      ? Container(
+                          decoration: BoxDecoration(
+                            color: HexColor.fromHex(value.hex),
+                            shape: BoxShape.circle,
+                          ),
+                          width: 20,
+                          height: 20,
+                        )
+                      : Text(
+                          value.toString(),
                         ),
-                        width: 20,
-                        height: 20,
-                        child: Text(''),
-                      )
-                    : Text(
-                        value.toString(),
-                      ),
+                ),
               ),
             ),
-          ));
+          );
         }
       });
       return gameCells;
@@ -373,7 +363,6 @@ class DatesList extends GetView<DatesController> {
       controller.emptyPriceList();
       controller.getPriceListByDate(dateId);
       showModalBottomSheet(
-
           // backgroundColor: Colors.red,
           isScrollControlled: true,
           context: context,
@@ -434,7 +423,7 @@ class DatesList extends GetView<DatesController> {
                                             // String val = user.value;
                                             return ExpansionTile(
                                               title: Text(
-                                                item.value['title'],
+                                                item.value.title!,
                                               ),
                                               children: [
                                                 Padding(
