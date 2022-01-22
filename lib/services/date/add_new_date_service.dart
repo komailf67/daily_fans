@@ -1,7 +1,4 @@
 import 'package:daily_fans/models/main_response_model.dart';
-import 'package:daily_fans/models/otpToken/otp_token_model.dart';
-import 'package:daily_fans/models/refreshToken/refresh_token_model.dart';
-import 'package:daily_fans/models/user/user_model.dart';
 import 'package:daily_fans/utils/base_url.dart';
 import 'package:daily_fans/utils/service_helper.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -23,14 +20,7 @@ class AddNewDateRequest {
 
 @JsonSerializable()
 class AddNewDateResponse extends MainResponse {
-  String? accessToken;
-  RefreshTokenModel? refreshToken;
-  UserModel? user;
-  OtpTokenModel? otpToken;
-
-  AddNewDateResponse(
-      this.accessToken, this.refreshToken, this.user, this.otpToken)
-      : super('', 0);
+  AddNewDateResponse() : super('', 0);
 
   Map<String, dynamic> toJson() => _$AddNewDateResponseToJson(this);
 

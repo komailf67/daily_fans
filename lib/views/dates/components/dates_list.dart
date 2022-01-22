@@ -1,4 +1,3 @@
-import 'package:daily_fans/globalControllers/util_controller.dart';
 import 'package:daily_fans/models/color/color_model.dart';
 import 'package:daily_fans/models/date/price_model.dart';
 import 'package:daily_fans/views/common/no_data.dart';
@@ -9,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math' as math;
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 enum SingingCharacter { lafayette, jefferson }
 
@@ -33,6 +33,10 @@ class DatesList extends GetView<DatesController> {
 
   @override
   Widget build(BuildContext context) {
+    void deleteDate(BuildContext context, int dateId, int index) {
+      controller.deleteDate(dateId, index);
+    }
+
     List<Widget> renderSingleCollapse(PriceModel item) {
       PriceModel priceItem = PriceModel(
         description: item.description,
@@ -91,267 +95,308 @@ class DatesList extends GetView<DatesController> {
           isScrollControlled: true,
           context: context,
           builder: (context) {
-            return Container(
-              color: const Color.fromARGB(255, 59, 59, 59),
-              // height: MediaQuery.of(context).size.height *
-              //     .65, //TODO after open keyboard
+            return SingleChildScrollView(
               child: Container(
-                decoration: BoxDecoration(
-                    color: Theme.of(context).canvasColor,
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20))),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: Form(
-                        key: controller.formKey,
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 10, right: 10),
-                          child: Column(
-                            children: [
-                              const Text('Add new list'),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              TextFormField(
-                                autofocus: true,
-                                onChanged: (text) => controller
-                                    .handleNewProductDetails('title', text),
-                                style: TextStyle(
-                                    fontSize: Theme.of(context)
-                                        .textTheme
-                                        .button
-                                        ?.fontSize),
-                                textInputAction: TextInputAction.next,
-                                // controller: controller.titleController,
-                                decoration: const InputDecoration(
-                                  labelText: "Title",
+                color: const Color.fromARGB(255, 59, 59, 59),
+                // height: MediaQuery.of(context).size.height *
+                //     .65, //TODO after open keyboard
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).canvasColor,
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20))),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: Form(
+                          key: controller.formKey,
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 10, right: 10),
+                            child: Column(
+                              children: [
+                                const Text('Add new list'),
+                                const SizedBox(
+                                  height: 15,
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              TextFormField(
-                                onChanged: (text) =>
-                                    controller.handleNewProductDetails(
-                                        'description', text),
-                                style: TextStyle(
-                                    fontSize: Theme.of(context)
-                                        .textTheme
-                                        .button
-                                        ?.fontSize),
-                                textInputAction: TextInputAction.next,
-                                // controller: controller.titleController,
-                                decoration: const InputDecoration(
-                                  labelText: "Description",
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              TextFormField(
-                                keyboardType: TextInputType.number,
-                                onChanged: (text) => controller
-                                    .handleNewProductDetails('price', text),
-                                style: TextStyle(
-                                    fontSize: Theme.of(context)
-                                        .textTheme
-                                        .button
-                                        ?.fontSize),
-                                textInputAction: TextInputAction.next,
-                                // controller: controller.titleController,
-                                decoration: const InputDecoration(
-                                  labelText: "Price",
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              TextFormField(
-                                onChanged: (text) =>
-                                    controller.handleNewProductDetails(
-                                        'partNumber', text),
-                                style: TextStyle(
-                                    fontSize: Theme.of(context)
-                                        .textTheme
-                                        .button
-                                        ?.fontSize),
-                                textInputAction: TextInputAction.next,
-                                // controller: controller.titleController,
-                                decoration: const InputDecoration(
-                                  labelText: "Part number",
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Flexible(
-                                    child: TextFormField(
-                                      onChanged: (text) =>
-                                          controller.handleNewProductDetails(
-                                              'yearModel', text),
-                                      keyboardType: TextInputType.number,
-                                      inputFormatters: <TextInputFormatter>[
-                                        FilteringTextInputFormatter.allow(
-                                            RegExp(r'[۱۲۳۴۵۶۷۸۹۰0-9]')),
-                                        LengthLimitingTextInputFormatter(4),
-                                      ],
-                                      style: TextStyle(
-                                          fontSize: Theme.of(context)
-                                              .textTheme
-                                              .button
-                                              ?.fontSize),
-                                      textInputAction: TextInputAction.next,
-                                      // controller: controller.yearController,
-                                      decoration: const InputDecoration(
-                                        labelText: "Year model",
-                                      ),
-                                    ),
+                                TextFormField(
+                                  autofocus: true,
+                                  onChanged: (text) => controller
+                                      .handleNewProductDetails('title', text),
+                                  style: TextStyle(
+                                      fontSize: Theme.of(context)
+                                          .textTheme
+                                          .button
+                                          ?.fontSize),
+                                  textInputAction: TextInputAction.next,
+                                  // controller: controller.titleController,
+                                  decoration: const InputDecoration(
+                                    labelText: "Title",
                                   ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              Container(
-                                height: 50,
-                                // color: Colors.red,
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                // alignment: ,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).canvasColor,
-                                  // color: Colors.red,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(5),
-                                  ),
-                                  border: Border.all(
-                                    color: const Color.fromARGB(
-                                        255, 212, 212, 212),
-                                    width: 1,
-                                  ),
+                                  validator: (value) {
+                                    if (value != null && value.isEmpty) {
+                                      return 'Please enter some text';
+                                    }
+                                    return null;
+                                  },
                                 ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      'Has guarantee',
-                                      style: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 110, 107, 107),
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    Obx(
-                                      () => CupertinoSwitch(
-                                        value: controller.hasGuarantee.isTrue,
-                                        onChanged: (value) {
-                                          controller.toggleGuarantee();
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                TextFormField(
+                                  onChanged: (text) =>
+                                      controller.handleNewProductDetails(
+                                          'description', text),
+                                  style: TextStyle(
+                                      fontSize: Theme.of(context)
+                                          .textTheme
+                                          .button
+                                          ?.fontSize),
+                                  textInputAction: TextInputAction.next,
+                                  // controller: controller.titleController,
+                                  decoration: const InputDecoration(
+                                    labelText: "Description",
+                                  ),
+                                  validator: (value) {
+                                    if (value != null && value.isEmpty) {
+                                      return 'Please enter some text';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  onChanged: (text) => controller
+                                      .handleNewProductDetails('price', text),
+                                  style: TextStyle(
+                                      fontSize: Theme.of(context)
+                                          .textTheme
+                                          .button
+                                          ?.fontSize),
+                                  textInputAction: TextInputAction.next,
+                                  // controller: controller.titleController,
+                                  decoration: const InputDecoration(
+                                    labelText: "Price",
+                                  ),
+                                  validator: (value) {
+                                    if (value != null && value.isEmpty) {
+                                      return 'Please enter some text';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                TextFormField(
+                                  onChanged: (text) =>
+                                      controller.handleNewProductDetails(
+                                          'partNumber', text),
+                                  style: TextStyle(
+                                      fontSize: Theme.of(context)
+                                          .textTheme
+                                          .button
+                                          ?.fontSize),
+                                  textInputAction: TextInputAction.next,
+                                  // controller: controller.titleController,
+                                  decoration: const InputDecoration(
+                                    labelText: "Part number",
+                                  ),
+                                  validator: (value) {
+                                    if (value != null && value.isEmpty) {
+                                      return 'Please enter some text';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Flexible(
+                                      child: TextFormField(
+                                        onChanged: (text) =>
+                                            controller.handleNewProductDetails(
+                                                'yearModel', text),
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'[۱۲۳۴۵۶۷۸۹۰0-9]')),
+                                          LengthLimitingTextInputFormatter(4),
+                                        ],
+                                        style: TextStyle(
+                                            fontSize: Theme.of(context)
+                                                .textTheme
+                                                .button
+                                                ?.fontSize),
+                                        textInputAction: TextInputAction.next,
+                                        // controller: controller.yearController,
+                                        decoration: const InputDecoration(
+                                          labelText: "Year model",
+                                        ),
+                                        validator: (value) {
+                                          if (value != null) {
+                                            if (value.isEmpty) {
+                                              return 'Please enter some text';
+                                            } else if (value.length < 4) {
+                                              return '4 character please!';
+                                            }
+                                          }
+                                          return null;
                                         },
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              Container(
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).canvasColor,
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Container(
+                                  height: 50,
                                   // color: Colors.red,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(5),
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10),
+                                  // alignment: ,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).canvasColor,
+                                    // color: Colors.red,
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(5),
+                                    ),
+                                    border: Border.all(
+                                      color: const Color.fromARGB(
+                                          255, 212, 212, 212),
+                                      width: 1,
+                                    ),
                                   ),
-                                  border: Border.all(
-                                    color: const Color.fromARGB(
-                                        255, 212, 212, 212),
-                                    width: 1,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text(
+                                        'Has guarantee',
+                                        style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 110, 107, 107),
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      Obx(
+                                        () => CupertinoSwitch(
+                                          value: controller.hasGuarantee.isTrue,
+                                          onChanged: (value) {
+                                            controller.toggleGuarantee();
+                                          },
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
-                                child: Container(
-                                  constraints: BoxConstraints(minHeight: 50),
-                                  // color: Colors.red,
-                                  child: Obx(
-                                    () => Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Text(
-                                          'Color',
-                                          style: TextStyle(
-                                            color: Color.fromARGB(
-                                                255, 110, 107, 107),
-                                            fontSize: 16,
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).canvasColor,
+                                    // color: Colors.red,
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(5),
+                                    ),
+                                    border: Border.all(
+                                      color: const Color.fromARGB(
+                                          255, 212, 212, 212),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: Container(
+                                    constraints: BoxConstraints(minHeight: 50),
+                                    // color: Colors.red,
+                                    child: Obx(
+                                      () => Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text(
+                                            'Color',
+                                            style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 110, 107, 107),
+                                              fontSize: 16,
+                                            ),
                                           ),
-                                        ),
-                                        Row(
-                                          children: controller.colors
-                                              .map(
-                                                (color) => Radio<int>(
-                                                  fillColor: MaterialStateColor
-                                                      .resolveWith((states) =>
-                                                          HexColor.fromHex(
-                                                              color.hex)),
-                                                  // activeColor: Colors.red,
-                                                  value: color.id,
-                                                  groupValue: controller
-                                                      .selectedColorValue.value,
-                                                  onChanged: (val) {
-                                                    controller
-                                                        .changeSelectedColor(
-                                                            val!);
-                                                  },
-                                                ),
-                                              )
-                                              .toList(),
-                                        ),
-                                      ],
+                                          Row(
+                                            children: controller.colors
+                                                .map(
+                                                  (color) => Radio<int>(
+                                                    fillColor: MaterialStateColor
+                                                        .resolveWith((states) =>
+                                                            HexColor.fromHex(
+                                                                color.hex)),
+                                                    // activeColor: Colors.red,
+                                                    value: color.id,
+                                                    groupValue: controller
+                                                        .selectedColorValue
+                                                        .value,
+                                                    onChanged: (val) {
+                                                      controller
+                                                          .changeSelectedColor(
+                                                              val!);
+                                                    },
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              SizedBox(
-                                width: double.infinity,
-                                height: 55,
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    var res =
-                                        await controller.addNewProductDetails();
-                                    if (res != null) {
-                                      // controller.getDatesList();
-                                      controller.getPriceListByDate(dateId);
-                                      Navigator.pop(context);
-                                    }
-                                  },
-                                  child: const Text('Submit'),
+                                const SizedBox(
+                                  height: 15,
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                            ],
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 55,
+                                  child: ElevatedButton(
+                                    onPressed: () async {
+                                      if (controller.formKey.currentState ==
+                                              null ||
+                                          !controller.formKey.currentState!
+                                              .validate()) return;
+                                      var res = await controller
+                                          .addNewProductDetails();
+                                      if (res != null) {
+                                        // controller.getDatesList();
+                                        controller.getPriceListByDate(dateId);
+                                        Navigator.pop(context);
+                                      }
+                                    },
+                                    child: const Text('Submit'),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             );
@@ -468,45 +513,62 @@ class DatesList extends GetView<DatesController> {
                       child: Column(
                         children: controller.dates.asMap().entries.map((date) {
                           int idx = date.key + 1;
-                          // String val = date.value;
-                          return Card(
-                            child: ListTile(
-                              onTap: () => _showPriceListModal(date.value.id!),
-                              title: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    date.value.dateTime.toString(),
-                                  ),
-                                  Text(
-                                    date.value.title.toString(),
-                                  ),
-                                ],
-                              ),
-                              leading: Text(
-                                idx.toString(),
-                              ),
-                              trailing: IconButton(
-                                icon: controller.dates[date.key].loading
-                                    ? SizedBox(
-                                        height: 15,
-                                        child: CircularProgressIndicator(
-                                          color: Theme.of(context).primaryColor,
-                                          strokeWidth: 3,
-                                        ),
-                                      )
-                                    : Icon(
-                                        Icons.share,
-                                        color: Theme.of(context).primaryColor,
-                                      ),
-                                color: Theme.of(context).primaryColor,
-                                onPressed: () => controller.sendDatesToContacts(
-                                  date.value.id!,
-                                  date.key,
+                          return Slidable(
+                            child: Card(
+                              child: ListTile(
+                                onTap: () =>
+                                    _showPriceListModal(date.value.id!),
+                                title: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      date.value.dateTime.toString(),
+                                    ),
+                                    Text(
+                                      date.value.title.toString(),
+                                    ),
+                                  ],
                                 ),
-                                iconSize: 25,
+                                leading: Text(
+                                  idx.toString(),
+                                ),
+                                trailing: IconButton(
+                                  icon: controller.dates[date.key].loading
+                                      ? SizedBox(
+                                          height: 15,
+                                          child: CircularProgressIndicator(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            strokeWidth: 3,
+                                          ),
+                                        )
+                                      : Icon(
+                                          Icons.share,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                  color: Theme.of(context).primaryColor,
+                                  onPressed: () =>
+                                      controller.sendDatesToContacts(
+                                    date.value.id!,
+                                    date.key,
+                                  ),
+                                  iconSize: 25,
+                                ),
                               ),
+                            ),
+                            key: ValueKey(date.key),
+                            endActionPane: ActionPane(
+                              motion: const ScrollMotion(),
+                              children: [
+                                SlidableAction(
+                                  onPressed: (context) => deleteDate(
+                                      context, date.value.id!, date.key),
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                  label: 'Delete',
+                                ),
+                              ],
                             ),
                           );
                           // return Text(date);

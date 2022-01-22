@@ -12,6 +12,7 @@ class AddNewDate extends GetView<DatesController> {
     var utils = Get.find<UtilController>();
 
     void showAddNewDateModal() {
+      controller.resetDatesInpute();
       showModalBottomSheet(
           isScrollControlled: true,
           context: context,
@@ -46,6 +47,12 @@ class AddNewDate extends GetView<DatesController> {
                                 height: 15,
                               ),
                               TextFormField(
+                                validator: (value) {
+                                  if (value != null && value.isEmpty) {
+                                    return 'Please enter some text';
+                                  }
+                                  return null;
+                                },
                                 autofocus: true,
                                 style: TextStyle(
                                     fontSize: Theme.of(context)
@@ -65,6 +72,9 @@ class AddNewDate extends GetView<DatesController> {
                                 children: <Widget>[
                                   Flexible(
                                     child: TextFormField(
+                                      onChanged: (value) {
+                                        controller.yearController = value;
+                                      },
                                       keyboardType: TextInputType.number,
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter.allow(
@@ -77,10 +87,20 @@ class AddNewDate extends GetView<DatesController> {
                                               .button
                                               ?.fontSize),
                                       textInputAction: TextInputAction.next,
-                                      controller: controller.yearController,
+                                      initialValue: controller.yearController,
                                       decoration: const InputDecoration(
                                         labelText: "Year",
                                       ),
+                                      validator: (value) {
+                                        if (value != null) {
+                                          if (value.isEmpty) {
+                                            return 'Enter a year';
+                                          } else if (value.length < 4) {
+                                            return '4 character please';
+                                          }
+                                        }
+                                        return null;
+                                      },
                                     ),
                                   ),
                                   Container(
@@ -89,6 +109,9 @@ class AddNewDate extends GetView<DatesController> {
                                   ),
                                   Flexible(
                                     child: TextFormField(
+                                      onChanged: (value) {
+                                        controller.monthController = value;
+                                      },
                                       keyboardType: TextInputType.number,
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter.allow(
@@ -101,10 +124,19 @@ class AddNewDate extends GetView<DatesController> {
                                               .button
                                               ?.fontSize),
                                       textInputAction: TextInputAction.next,
-                                      controller: controller.monthController,
+                                      initialValue: controller.monthController,
+                                      // controller: controller.monthController,
                                       decoration: const InputDecoration(
                                         labelText: "Month",
                                       ),
+                                      validator: (value) {
+                                        if (value != null) {
+                                          if (value.isEmpty) {
+                                            return 'Enter a month';
+                                          }
+                                        }
+                                        return null;
+                                      },
                                     ),
                                   ),
                                   Container(
@@ -113,6 +145,9 @@ class AddNewDate extends GetView<DatesController> {
                                   ),
                                   Flexible(
                                     child: TextFormField(
+                                      onChanged: (value) {
+                                        controller.dayController = value;
+                                      },
                                       keyboardType: TextInputType.number,
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter.allow(
@@ -125,10 +160,18 @@ class AddNewDate extends GetView<DatesController> {
                                               .button
                                               ?.fontSize),
                                       textInputAction: TextInputAction.next,
-                                      controller: controller.dayController,
+                                      initialValue: controller.dayController,
                                       decoration: const InputDecoration(
                                         labelText: "Day",
                                       ),
+                                      validator: (value) {
+                                        if (value != null) {
+                                          if (value.isEmpty) {
+                                            return 'Enter a day';
+                                          }
+                                        }
+                                        return null;
+                                      },
                                     ),
                                   ),
                                 ],
@@ -141,9 +184,10 @@ class AddNewDate extends GetView<DatesController> {
                                 height: 55,
                                 child: ElevatedButton(
                                   onPressed: () async {
-                                    // if (controller.formKey.currentState == null ||
-                                    //     !controller.formKey.currentState!.validate())
-                                    //   return;
+                                    if (controller.formKey.currentState ==
+                                            null ||
+                                        !controller.formKey.currentState!
+                                            .validate()) return;
                                     // await controller.login();
                                     // Get.toNamed(DatesView.route());
                                     var res = await controller.addNewDate();

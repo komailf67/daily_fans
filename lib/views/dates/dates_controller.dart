@@ -4,6 +4,7 @@ import 'package:daily_fans/models/date/price_model.dart';
 import 'package:daily_fans/services/color/get_colors_list_service.dart';
 import 'package:daily_fans/services/date/add_new_date_service.dart';
 import 'package:daily_fans/services/date/add_new_product_details_service.dart';
+import 'package:daily_fans/services/date/delete_date_service.dart';
 import 'package:daily_fans/services/date/get_dates_list_service.dart';
 import 'package:daily_fans/services/date/get_prices_list_by_date_service.dart';
 import 'package:daily_fans/services/date/send_date_to_contacts_service.dart';
@@ -19,10 +20,10 @@ class DatesController extends GetxController {
   // Jalali? now;
   final formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
-  late final dayController = TextEditingController(text: now.day.toString());
-  late final monthController =
-      TextEditingController(text: now.month.toString());
-  late final yearController = TextEditingController(text: now.year.toString());
+
+  late String dayController = now.day.toString();
+  late String monthController = now.month.toString();
+  late String yearController = now.year.toString();
 
   Rx<PriceModel> productDetails = PriceModel().obs;
   RxInt selectedColorValue = 0.obs;
@@ -48,8 +49,6 @@ class DatesController extends GetxController {
 
   void validateNewProductDetails() {
     //TODO
-    print('aaaaaaaaaaaa');
-    print(productDetails.toJson());
     productDetails.toJson().forEach((final String key, final value) {
       // if (value == null || value) {
 
@@ -88,7 +87,9 @@ class DatesController extends GetxController {
         productDetails.value.partNumber = value;
         break;
       case 'yearModel':
-        productDetails.value.yearModel = int.parse(value);
+        if (value.length > 0) {
+          productDetails.value.yearModel = int.parse(value);
+        }
         break;
       case 'color':
         productDetails.value.colorId = value;
@@ -120,8 +121,7 @@ class DatesController extends GetxController {
     var req = AddNewDateRequest(
       title: titleController.text,
       // dateTime: "14$year/${monthController.text}/${dayController.text}",
-      dateTime:
-          "${yearController.text}/${monthController.text}/${dayController.text}",
+      dateTime: "${yearController}/${monthController}/${dayController}",
     );
     var res = await addNewDateService(req);
     return res;
@@ -263,5 +263,21 @@ class DatesController extends GetxController {
     var selectedDate = dates[index];
     selectedDate.loading = state;
     dates[index] = selectedDate;
+  }
+
+  void resetDatesInpute() {
+    yearController = now.year.toString();
+    monthController = now.month.toString();
+    dayController = now.day.toString();
+  }
+
+  Future deleteDate(int dateId, int index) async {
+    try {
+      print(index);
+      DeleteDateRequest req = DeleteDateRequest(dateId: dateId);
+      DeleteDateResponse? res = await deleteDateService(req);
+      if (res == null) return;
+      dates.removeAt(index);
+    } catch (e) {}
   }
 }

@@ -22,8 +22,8 @@ import 'package:flutter/material.dart';
 // const secondaryRed = Color(0XFFF9EBED);
 // const secondaryGreen = Color(0XFFCDEDE1);
 
-const primaryColor = Color(0XFFE6007E);
-const secondaryColor = Color(0XFF0B7B99);
+const primaryColor = Color(0XFF0B7B99);
+const secondaryColor = Color.fromARGB(255, 255, 0, 0);
 const errorColor = Color(0XFFDC2626);
 const warningColor = Color(0XFFD97706);
 const successColor = Color(0XFF059669);
