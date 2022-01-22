@@ -175,12 +175,12 @@ class DatesController extends GetxController {
     }
   }
 
-  Future getPriceListByDate(int dateId) async {
+  Future<bool> getPriceListByDate(int dateId) async {
     try {
       emptyPriceList();
       GetPricesListByDateServiceResponse? res =
           await getPricesListByDateService(dateId);
-      if (res == null) return;
+      if (res == null) return false;
 
       for (var key in res.data!) {
         prices.add(
@@ -197,7 +197,9 @@ class DatesController extends GetxController {
           ),
         );
       }
+      return true;
     } catch (e) {
+      return false;
       print('errrrrrrrrrrrrrrrrrr');
       print(e);
     }
@@ -273,7 +275,6 @@ class DatesController extends GetxController {
 
   Future deleteDate(int dateId, int index) async {
     try {
-      print(index);
       DeleteDateRequest req = DeleteDateRequest(dateId: dateId);
       DeleteDateResponse? res = await deleteDateService(req);
       if (res == null) return;

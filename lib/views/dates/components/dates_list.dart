@@ -405,8 +405,6 @@ class DatesList extends GetView<DatesController> {
 
     void _showPriceListModal(int dateId) {
       ScrollController _scrollController = ScrollController();
-      controller.emptyPriceList();
-      controller.getPriceListByDate(dateId);
       showModalBottomSheet(
           // backgroundColor: Colors.red,
           isScrollControlled: true,
@@ -516,8 +514,13 @@ class DatesList extends GetView<DatesController> {
                           return Slidable(
                             child: Card(
                               child: ListTile(
-                                onTap: () =>
-                                    _showPriceListModal(date.value.id!),
+                                onTap: () async {
+                                  controller.emptyPriceList();
+                                  bool res = await controller
+                                      .getPriceListByDate(date.value.id!);
+                                  if (res) {}
+                                  _showPriceListModal(date.value.id!);
+                                },
                                 title: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
