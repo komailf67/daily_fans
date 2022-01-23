@@ -131,9 +131,10 @@ class ServiceHelper {
   void _addLoader(methodEnum) {
     if (loaderType == LoaderType.None) return;
     var util = _getController();
-    if (methodEnum == HttpMethodEnum.POST) {
+    if (methodEnum == HttpMethodEnum.POST || methodEnum == HttpMethodEnum.PUT) {
       util.toggleSkeletonLoadingState(true);
-    } else if (methodEnum == HttpMethodEnum.GET) {
+    } else if (methodEnum == HttpMethodEnum.GET ||
+        methodEnum == HttpMethodEnum.DELETE) {
       EasyLoading.show(
         status: 'loading...',
         maskType: EasyLoadingMaskType.black,

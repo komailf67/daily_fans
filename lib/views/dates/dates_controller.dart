@@ -5,6 +5,8 @@ import 'package:daily_fans/services/color/get_colors_list_service.dart';
 import 'package:daily_fans/services/date/add_new_date_service.dart';
 import 'package:daily_fans/services/date/add_new_product_details_service.dart';
 import 'package:daily_fans/services/date/delete_date_service.dart';
+import 'package:daily_fans/services/date/delete_priceList_service.dart';
+import 'package:daily_fans/services/date/edit_product_details_service.dart';
 import 'package:daily_fans/services/date/get_dates_list_service.dart';
 import 'package:daily_fans/services/date/get_prices_list_by_date_service.dart';
 import 'package:daily_fans/services/date/send_date_to_contacts_service.dart';
@@ -43,8 +45,13 @@ class DatesController extends GetxController {
   RxBool getPriceListLoading = false.obs;
 
   void changeSelectedColor(int colorValue) {
+    ColorType selectedColor =
+        colors.firstWhere((element) => element.id == colorValue);
+    print(selectedColor.toJson());
     selectedColorValue.value = colorValue;
     productDetails.value.colorId = colorValue;
+    productDetails.value.color = selectedColor;
+    productDetails.refresh();
   }
 
   void validateNewProductDetails() {
@@ -104,14 +111,38 @@ class DatesController extends GetxController {
     }
   }
 
+  void prepareEditPriceList(int priceId) {
+    PriceModel selectedPriceList = prices.firstWhere((e) => e.id == priceId);
+    productDetails.value = selectedPriceList;
+  }
+
+  Future editPiceList() async {
+    EditProductDetailsResponse? res = await editProductDetailsService(
+      EditProductDetailsRequest(
+        id: productDetails.value.id!,
+        title: productDetails.value.title!,
+        description: productDetails.value.description!,
+        price: productDetails.value.price!,
+        partNumber: productDetails.value.partNumber!,
+        yearModel: productDetails.value.yearModel!,
+        colorId: productDetails.value.color!.id,
+        hasGuarantee: productDetails.value.hasGuarantee!,
+        priceListId: productDetails.value.priceListId!,
+      ),
+    );
+    return res;
+  }
+
   void changeSortDates() {
     descending.value = !descending.value;
     getDatesList();
   }
 
   void toggleGuarantee() {
+    print('object');
     hasGuarantee.value = !hasGuarantee.value;
     productDetails.value.hasGuarantee = hasGuarantee.value;
+    productDetails.refresh();
   }
 
   Future addNewDate() async {
@@ -214,15 +245,7 @@ class DatesController extends GetxController {
   }
 
   void emptyNewProductDetailsObject() {
-    productDetails.value = PriceModel(
-        title: '',
-        description: '',
-        price: 0,
-        partNumber: '',
-        yearModel: 0,
-        colorId: 0,
-        hasGuarantee: false,
-        priceListId: 0);
+    productDetails.value = PriceModel();
   }
 
   Future addNewProductDetails() async {
@@ -279,6 +302,16 @@ class DatesController extends GetxController {
       DeleteDateResponse? res = await deleteDateService(req);
       if (res == null) return;
       dates.removeAt(index);
+    } catch (e) {}
+  }
+
+  Future deletePriceList(int priceListId, int index) async {
+    try {
+      DeletePriceListRequest req =
+          DeletePriceListRequest(priceListId: priceListId);
+      DeletePriceListResponse? res = await deletePriceListService(req);
+      if (res == null) return;
+      prices.removeAt(index);
     } catch (e) {}
   }
 }

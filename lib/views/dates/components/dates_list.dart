@@ -1,3 +1,4 @@
+import 'package:daily_fans/globalControllers/util_controller.dart';
 import 'package:daily_fans/models/color/color_model.dart';
 import 'package:daily_fans/models/date/price_model.dart';
 import 'package:daily_fans/views/common/no_data.dart';
@@ -28,60 +29,17 @@ extension HexColor on Color {
       '${blue.toRadixString(16).padLeft(2, '0')}';
 }
 
+enum ModalType { create, edit }
+
 class DatesList extends GetView<DatesController> {
   const DatesList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    void deleteDate(BuildContext context, int dateId, int index) {
-      controller.deleteDate(dateId, index);
-    }
+    var utils = Get.find<UtilController>();
 
-    List<Widget> renderSingleCollapse(PriceModel item) {
-      PriceModel priceItem = PriceModel(
-        description: item.description,
-        price: item.price,
-        partNumber: item.partNumber,
-        yearModel: item.yearModel,
-        color: ColorType(
-            id: item.color!.id, title: item.color!.title, hex: item.color!.hex),
-        hasGuarantee: item.hasGuarantee,
-      );
-
-      List<Widget> gameCells = <Widget>[];
-      priceItem.toJson().forEach((final String key, final value) {
-        if (value != null) {
-          gameCells.add(
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Card(
-                child: ListTile(
-                  // onTap: () => _showPriceListModal(),
-                  leading: Text(
-                    key.toString(),
-                  ),
-                  trailing: value is ColorType
-                      ? Container(
-                          decoration: BoxDecoration(
-                            color: HexColor.fromHex(value.hex),
-                            shape: BoxShape.circle,
-                          ),
-                          width: 20,
-                          height: 20,
-                        )
-                      : Text(
-                          value.toString(),
-                        ),
-                ),
-              ),
-            ),
-          );
-        }
-      });
-      return gameCells;
-    }
-
-    void _showAddNewPriceListInModal(int dateId) {
+    void _showAddNewPriceListInModal(
+        int dateId, int priceId, ModalType modalType) {
       List<int> colorsValues = [];
       for (var item in controller.colors) {
         colorsValues.add(item.id);
@@ -90,6 +48,11 @@ class DatesList extends GetView<DatesController> {
         controller.changeSelectedColor(colorsValues[0]);
       }
 
+      if (modalType == ModalType.edit) {
+        controller.prepareEditPriceList(priceId);
+      } else if (modalType == ModalType.create) {
+        controller.emptyNewProductDetailsObject();
+      }
       controller.setPriceListId(dateId);
       showModalBottomSheet(
           isScrollControlled: true,
@@ -127,6 +90,8 @@ class DatesList extends GetView<DatesController> {
                                   height: 15,
                                 ),
                                 TextFormField(
+                                  initialValue:
+                                      controller.productDetails.value.title,
                                   autofocus: true,
                                   onChanged: (text) => controller
                                       .handleNewProductDetails('title', text),
@@ -151,6 +116,8 @@ class DatesList extends GetView<DatesController> {
                                   height: 15,
                                 ),
                                 TextFormField(
+                                  initialValue: controller
+                                      .productDetails.value.description,
                                   onChanged: (text) =>
                                       controller.handleNewProductDetails(
                                           'description', text),
@@ -175,6 +142,12 @@ class DatesList extends GetView<DatesController> {
                                   height: 15,
                                 ),
                                 TextFormField(
+                                  initialValue: controller
+                                              .productDetails.value.price !=
+                                          null
+                                      ? controller.productDetails.value.price
+                                          .toString()
+                                      : '',
                                   keyboardType: TextInputType.number,
                                   onChanged: (text) => controller
                                       .handleNewProductDetails('price', text),
@@ -199,6 +172,8 @@ class DatesList extends GetView<DatesController> {
                                   height: 15,
                                 ),
                                 TextFormField(
+                                  initialValue: controller
+                                      .productDetails.value.partNumber,
                                   onChanged: (text) =>
                                       controller.handleNewProductDetails(
                                           'partNumber', text),
@@ -226,6 +201,13 @@ class DatesList extends GetView<DatesController> {
                                   children: <Widget>[
                                     Flexible(
                                       child: TextFormField(
+                                        initialValue: controller.productDetails
+                                                    .value.yearModel !=
+                                                null
+                                            ? controller
+                                                .productDetails.value.yearModel
+                                                .toString()
+                                            : '',
                                         onChanged: (text) =>
                                             controller.handleNewProductDetails(
                                                 'yearModel', text),
@@ -294,7 +276,10 @@ class DatesList extends GetView<DatesController> {
                                       ),
                                       Obx(
                                         () => CupertinoSwitch(
-                                          value: controller.hasGuarantee.isTrue,
+                                          value: modalType == ModalType.create
+                                              ? controller.hasGuarantee.isTrue
+                                              : controller.productDetails.value
+                                                  .hasGuarantee!,
                                           onChanged: (value) {
                                             controller.toggleGuarantee();
                                           },
@@ -337,27 +322,43 @@ class DatesList extends GetView<DatesController> {
                                               fontSize: 16,
                                             ),
                                           ),
-                                          Row(
-                                            children: controller.colors
+                                          DropdownButton<String>(
+                                            value: modalType == ModalType.create
+                                                ? controller
+                                                    .selectedColorValue.value
+                                                    .toString()
+                                                : controller.productDetails
+                                                    .value.color?.id
+                                                    .toString(),
+                                            elevation: 16,
+                                            onChanged: (String? newValue) {
+                                              controller.changeSelectedColor(
+                                                int.parse(newValue!),
+                                              );
+                                            },
+                                            items: controller.colors
+                                                .asMap()
+                                                .entries
                                                 .map(
-                                                  (color) => Radio<int>(
-                                                    fillColor: MaterialStateColor
-                                                        .resolveWith((states) =>
-                                                            HexColor.fromHex(
-                                                                color.hex)),
-                                                    // activeColor: Colors.red,
-                                                    value: color.id,
-                                                    groupValue: controller
-                                                        .selectedColorValue
-                                                        .value,
-                                                    onChanged: (val) {
-                                                      controller
-                                                          .changeSelectedColor(
-                                                              val!);
-                                                    },
+                                              (color) {
+                                                return DropdownMenuItem<String>(
+                                                  value:
+                                                      color.value.id.toString(),
+                                                  child: Container(
+                                                    height: 20,
+                                                    width: 20,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                        Radius.circular(10),
+                                                      ),
+                                                      color: HexColor.fromHex(
+                                                          color.value.hex),
+                                                    ),
                                                   ),
-                                                )
-                                                .toList(),
+                                                );
+                                              },
+                                            ).toList(),
                                           ),
                                         ],
                                       ),
@@ -376,15 +377,34 @@ class DatesList extends GetView<DatesController> {
                                               null ||
                                           !controller.formKey.currentState!
                                               .validate()) return;
-                                      var res = await controller
-                                          .addNewProductDetails();
+
+                                      var res = modalType == ModalType.create
+                                          ? await controller
+                                              .addNewProductDetails()
+                                          : await controller.editPiceList();
                                       if (res != null) {
                                         // controller.getDatesList();
                                         controller.getPriceListByDate(dateId);
                                         Navigator.pop(context);
                                       }
                                     },
-                                    child: const Text('Submit'),
+                                    child: Obx(
+                                      //TODO: button kit with loading
+                                      () => utils.skeletonLoading.value
+                                          ? const SizedBox(
+                                              height: 30,
+                                              width: 30,
+                                              child: CircularProgressIndicator(
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          : const Text(
+                                              'Submit',
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      18), //font size from theme
+                                            ),
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(
@@ -401,6 +421,63 @@ class DatesList extends GetView<DatesController> {
               ),
             );
           });
+    }
+
+    void deleteDate(BuildContext context, int dateId, int index) {
+      controller.deleteDate(dateId, index);
+    }
+
+    void deletePriceList(BuildContext context, int priceId, int index) {
+      controller.deletePriceList(priceId, index);
+    }
+
+    void editPrice(BuildContext context, int dateId, int priceId) {
+      _showAddNewPriceListInModal(dateId, priceId, ModalType.edit);
+      // controller.deleteDate(dateId, index);
+    }
+
+    List<Widget> renderSingleCollapse(PriceModel item) {
+      PriceModel priceItem = PriceModel(
+        description: item.description,
+        price: item.price,
+        partNumber: item.partNumber,
+        yearModel: item.yearModel,
+        color: ColorType(
+            id: item.color!.id, title: item.color!.title, hex: item.color!.hex),
+        hasGuarantee: item.hasGuarantee,
+      );
+
+      List<Widget> gameCells = <Widget>[];
+      priceItem.toJson().forEach((final String key, final value) {
+        if (value != null) {
+          gameCells.add(
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: Card(
+                child: ListTile(
+                  // onTap: () => _showPriceListModal(),
+                  leading: Text(
+                    key.toString(),
+                  ),
+                  trailing: value is ColorType
+                      ? Container(
+                          decoration: BoxDecoration(
+                            color: HexColor.fromHex(value.hex),
+                            shape: BoxShape.circle,
+                          ),
+                          width: 20,
+                          height: 20,
+                        )
+                      : Text(
+                          value.toString(),
+                        ),
+                ),
+              ),
+            ),
+          );
+        }
+      });
+      return gameCells;
     }
 
     void _showPriceListModal(int dateId) {
@@ -427,8 +504,8 @@ class DatesList extends GetView<DatesController> {
                       ? Column(
                           children: [
                             closeModal(context),
-                            buildPadding(
-                                _showAddNewPriceListInModal, dateId, context),
+                            buildPadding(_showAddNewPriceListInModal, dateId, 0,
+                                context, ModalType.create),
                             SizedBox(
                               height: 50,
                             ),
@@ -439,8 +516,8 @@ class DatesList extends GetView<DatesController> {
                           children: [
                             // if (controller.prices.isNotEmpty)
                             closeModal(context),
-                            buildPadding(
-                                _showAddNewPriceListInModal, dateId, context),
+                            buildPadding(_showAddNewPriceListInModal, dateId, 0,
+                                context, ModalType.create),
                             const SizedBox(
                               height: 20,
                             ),
@@ -464,22 +541,54 @@ class DatesList extends GetView<DatesController> {
                                               .map((item) {
                                             int idx = item.key + 1;
                                             // String val = user.value;
-                                            return ExpansionTile(
-                                              title: Text(
-                                                item.value.title!,
-                                              ),
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 10, right: 10),
-                                                  child: Column(
-                                                    children:
-                                                        renderSingleCollapse(
-                                                            item.value),
+                                            return Slidable(
+                                              key: ValueKey(item.key),
+                                              endActionPane: ActionPane(
+                                                motion: const ScrollMotion(),
+                                                children: [
+                                                  SlidableAction(
+                                                    onPressed: (context) =>
+                                                        deletePriceList(
+                                                            context,
+                                                            item.value.id!,
+                                                            item.key),
+                                                    backgroundColor: Colors.red,
+                                                    foregroundColor:
+                                                        Colors.white,
+                                                    label: 'Delete',
                                                   ),
+                                                  SlidableAction(
+                                                    onPressed: (context) =>
+                                                        editPrice(
+                                                            context,
+                                                            dateId,
+                                                            item.value.id!),
+                                                    backgroundColor:
+                                                        Colors.blue,
+                                                    foregroundColor:
+                                                        Colors.white,
+                                                    label: 'Edit',
+                                                  ),
+                                                ],
+                                              ),
+                                              child: ExpansionTile(
+                                                title: Text(
+                                                  item.value.title!,
                                                 ),
-                                              ],
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Column(
+                                                      children:
+                                                          renderSingleCollapse(
+                                                              item.value),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             );
                                           }).toList(),
                                         ),
@@ -602,8 +711,13 @@ class DatesList extends GetView<DatesController> {
     );
   }
 
-  Padding buildPadding(void _showAddNewPriceListInModal(int dateId), int dateId,
-      BuildContext context) {
+  Padding buildPadding(
+      void _showAddNewPriceListInModal(
+          int dateId, int priceId, ModalType modalType),
+      int dateId,
+      int priceId,
+      BuildContext context,
+      ModalType modalType) {
     return Padding(
       padding: const EdgeInsets.only(right: 15),
       child: Align(
@@ -624,7 +738,8 @@ class DatesList extends GetView<DatesController> {
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.bold),
                 ),
-                onPressed: () => _showAddNewPriceListInModal(dateId)),
+                onPressed: () =>
+                    _showAddNewPriceListInModal(dateId, priceId, modalType)),
           ),
           //     FloatingActionButton(
           //   shape: BeveledRectangleBorder(borderRadius: BorderRadius.zero),
