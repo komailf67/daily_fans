@@ -648,7 +648,8 @@ class DatesList extends GetView<DatesController> {
                                 trailing: IconButton(
                                   icon: controller.dates[date.key].loading
                                       ? SizedBox(
-                                          height: 15,
+                                          height: 25,
+                                          width: 25,
                                           child: CircularProgressIndicator(
                                             color:
                                                 Theme.of(context).primaryColor,
