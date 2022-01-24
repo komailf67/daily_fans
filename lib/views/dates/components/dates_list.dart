@@ -50,377 +50,381 @@ class DatesList extends GetView<DatesController> {
 
       if (modalType == ModalType.edit) {
         controller.prepareEditPriceList(priceId);
-      } else if (modalType == ModalType.create) {
-        controller.emptyNewProductDetailsObject();
       }
       controller.setPriceListId(dateId);
       showModalBottomSheet(
-          isScrollControlled: true,
-          context: context,
-          builder: (context) {
-            return SingleChildScrollView(
+        isScrollControlled: true,
+        context: context,
+        builder: (context) {
+          return SingleChildScrollView(
+            child: Container(
+              color: const Color.fromARGB(255, 59, 59, 59),
+              // height: MediaQuery.of(context).size.height *
+              //     .65, //TODO after open keyboard
               child: Container(
-                color: const Color.fromARGB(255, 59, 59, 59),
-                // height: MediaQuery.of(context).size.height *
-                //     .65, //TODO after open keyboard
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).canvasColor,
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20))),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).viewInsets.bottom),
-                        child: Form(
-                          key: controller.formKey,
-                          child: Container(
-                            margin: const EdgeInsets.only(left: 10, right: 10),
-                            child: Column(
-                              children: [
-                                const Text('Add new list'),
-                                const SizedBox(
-                                  height: 15,
+                decoration: BoxDecoration(
+                    color: Theme.of(context).canvasColor,
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20))),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: Form(
+                        key: controller.formKey,
+                        child: Container(
+                          margin: const EdgeInsets.only(left: 10, right: 10),
+                          child: Column(
+                            children: [
+                              modalType == ModalType.create
+                                  ? const Text('Add new list')
+                                  : const Text('Edit list'),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              TextFormField(
+                                initialValue:
+                                    controller.productDetails.value.title,
+                                autofocus: true,
+                                onChanged: (text) => controller
+                                    .handleNewProductDetails('title', text),
+                                style: TextStyle(
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .button
+                                        ?.fontSize),
+                                textInputAction: TextInputAction.next,
+                                // controller: controller.titleController,
+                                decoration: const InputDecoration(
+                                  labelText: "Title",
                                 ),
-                                TextFormField(
-                                  initialValue:
-                                      controller.productDetails.value.title,
-                                  autofocus: true,
-                                  onChanged: (text) => controller
-                                      .handleNewProductDetails('title', text),
-                                  style: TextStyle(
-                                      fontSize: Theme.of(context)
-                                          .textTheme
-                                          .button
-                                          ?.fontSize),
-                                  textInputAction: TextInputAction.next,
-                                  // controller: controller.titleController,
-                                  decoration: const InputDecoration(
-                                    labelText: "Title",
-                                  ),
-                                  validator: (value) {
-                                    if (value != null && value.isEmpty) {
-                                      return 'Please enter some text';
-                                    }
-                                    return null;
-                                  },
+                                validator: (value) {
+                                  if (value != null && value.isEmpty) {
+                                    return 'Please enter some text';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              TextFormField(
+                                initialValue:
+                                    controller.productDetails.value.description,
+                                onChanged: (text) =>
+                                    controller.handleNewProductDetails(
+                                        'description', text),
+                                style: TextStyle(
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .button
+                                        ?.fontSize),
+                                textInputAction: TextInputAction.next,
+                                // controller: controller.titleController,
+                                decoration: const InputDecoration(
+                                  labelText: "Description",
                                 ),
-                                const SizedBox(
-                                  height: 15,
+                                validator: (value) {
+                                  if (value != null && value.isEmpty) {
+                                    return 'Please enter some text';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              TextFormField(
+                                initialValue:
+                                    controller.productDetails.value.price !=
+                                            null
+                                        ? controller.productDetails.value.price
+                                            .toString()
+                                        : '',
+                                keyboardType: TextInputType.number,
+                                onChanged: (text) => controller
+                                    .handleNewProductDetails('price', text),
+                                style: TextStyle(
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .button
+                                        ?.fontSize),
+                                textInputAction: TextInputAction.next,
+                                // controller: controller.titleController,
+                                decoration: const InputDecoration(
+                                  labelText: "Price",
                                 ),
-                                TextFormField(
-                                  initialValue: controller
-                                      .productDetails.value.description,
-                                  onChanged: (text) =>
-                                      controller.handleNewProductDetails(
-                                          'description', text),
-                                  style: TextStyle(
-                                      fontSize: Theme.of(context)
-                                          .textTheme
-                                          .button
-                                          ?.fontSize),
-                                  textInputAction: TextInputAction.next,
-                                  // controller: controller.titleController,
-                                  decoration: const InputDecoration(
-                                    labelText: "Description",
-                                  ),
-                                  validator: (value) {
-                                    if (value != null && value.isEmpty) {
-                                      return 'Please enter some text';
-                                    }
-                                    return null;
-                                  },
+                                validator: (value) {
+                                  if (value != null && value.isEmpty) {
+                                    return 'Please enter some text';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              TextFormField(
+                                initialValue:
+                                    controller.productDetails.value.partNumber,
+                                onChanged: (text) =>
+                                    controller.handleNewProductDetails(
+                                        'partNumber', text),
+                                style: TextStyle(
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .button
+                                        ?.fontSize),
+                                textInputAction: TextInputAction.next,
+                                // controller: controller.titleController,
+                                decoration: const InputDecoration(
+                                  labelText: "Part number",
                                 ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                TextFormField(
-                                  initialValue: controller
-                                              .productDetails.value.price !=
-                                          null
-                                      ? controller.productDetails.value.price
-                                          .toString()
-                                      : '',
-                                  keyboardType: TextInputType.number,
-                                  onChanged: (text) => controller
-                                      .handleNewProductDetails('price', text),
-                                  style: TextStyle(
-                                      fontSize: Theme.of(context)
-                                          .textTheme
-                                          .button
-                                          ?.fontSize),
-                                  textInputAction: TextInputAction.next,
-                                  // controller: controller.titleController,
-                                  decoration: const InputDecoration(
-                                    labelText: "Price",
-                                  ),
-                                  validator: (value) {
-                                    if (value != null && value.isEmpty) {
-                                      return 'Please enter some text';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                TextFormField(
-                                  initialValue: controller
-                                      .productDetails.value.partNumber,
-                                  onChanged: (text) =>
-                                      controller.handleNewProductDetails(
-                                          'partNumber', text),
-                                  style: TextStyle(
-                                      fontSize: Theme.of(context)
-                                          .textTheme
-                                          .button
-                                          ?.fontSize),
-                                  textInputAction: TextInputAction.next,
-                                  // controller: controller.titleController,
-                                  decoration: const InputDecoration(
-                                    labelText: "Part number",
-                                  ),
-                                  validator: (value) {
-                                    if (value != null && value.isEmpty) {
-                                      return 'Please enter some text';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Flexible(
-                                      child: TextFormField(
-                                        initialValue: controller.productDetails
-                                                    .value.yearModel !=
-                                                null
-                                            ? controller
-                                                .productDetails.value.yearModel
-                                                .toString()
-                                            : '',
-                                        onChanged: (text) =>
-                                            controller.handleNewProductDetails(
-                                                'yearModel', text),
-                                        keyboardType: TextInputType.number,
-                                        inputFormatters: <TextInputFormatter>[
-                                          FilteringTextInputFormatter.allow(
-                                              RegExp(r'[۱۲۳۴۵۶۷۸۹۰0-9]')),
-                                          LengthLimitingTextInputFormatter(4),
-                                        ],
-                                        style: TextStyle(
-                                            fontSize: Theme.of(context)
-                                                .textTheme
-                                                .button
-                                                ?.fontSize),
-                                        textInputAction: TextInputAction.next,
-                                        // controller: controller.yearController,
-                                        decoration: const InputDecoration(
-                                          labelText: "Year model",
-                                        ),
-                                        validator: (value) {
-                                          if (value != null) {
-                                            if (value.isEmpty) {
-                                              return 'Please enter some text';
-                                            } else if (value.length < 4) {
-                                              return '4 character please!';
-                                            }
+                                validator: (value) {
+                                  if (value != null && value.isEmpty) {
+                                    return 'Please enter some text';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Flexible(
+                                    child: TextFormField(
+                                      initialValue: controller.productDetails
+                                                  .value.yearModel !=
+                                              null
+                                          ? controller
+                                              .productDetails.value.yearModel
+                                              .toString()
+                                          : '',
+                                      onChanged: (text) =>
+                                          controller.handleNewProductDetails(
+                                              'yearModel', text),
+                                      keyboardType: TextInputType.number,
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'[۱۲۳۴۵۶۷۸۹۰0-9]')),
+                                        LengthLimitingTextInputFormatter(4),
+                                      ],
+                                      style: TextStyle(
+                                          fontSize: Theme.of(context)
+                                              .textTheme
+                                              .button
+                                              ?.fontSize),
+                                      textInputAction: TextInputAction.next,
+                                      // controller: controller.yearController,
+                                      decoration: const InputDecoration(
+                                        labelText: "Year model",
+                                      ),
+                                      validator: (value) {
+                                        if (value != null) {
+                                          if (value.isEmpty) {
+                                            return 'Please enter some text';
+                                          } else if (value.length < 4) {
+                                            return '4 character please!';
                                           }
-                                          return null;
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              Container(
+                                height: 50,
+                                // color: Colors.red,
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                // alignment: ,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).canvasColor,
+                                  // color: Colors.red,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(5),
+                                  ),
+                                  border: Border.all(
+                                    color: const Color.fromARGB(
+                                        255, 212, 212, 212),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      'Has guarantee',
+                                      style: TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 110, 107, 107),
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Obx(
+                                      () => CupertinoSwitch(
+                                        value: modalType == ModalType.create
+                                            ? controller.hasGuarantee.isTrue
+                                            : controller.productDetails.value
+                                                    .hasGuarantee !=
+                                                false,
+                                        onChanged: (value) {
+                                          controller.toggleGuarantee();
                                         },
                                       ),
-                                    ),
+                                    )
                                   ],
                                 ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                Container(
-                                  height: 50,
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).canvasColor,
                                   // color: Colors.red,
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10),
-                                  // alignment: ,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).canvasColor,
-                                    // color: Colors.red,
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(5),
-                                    ),
-                                    border: Border.all(
-                                      color: const Color.fromARGB(
-                                          255, 212, 212, 212),
-                                      width: 1,
-                                    ),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(5),
                                   ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text(
-                                        'Has guarantee',
-                                        style: TextStyle(
-                                          color: Color.fromARGB(
-                                              255, 110, 107, 107),
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      Obx(
-                                        () => CupertinoSwitch(
-                                          value: modalType == ModalType.create
-                                              ? controller.hasGuarantee.isTrue
-                                              : controller.productDetails.value
-                                                  .hasGuarantee!,
-                                          onChanged: (value) {
-                                            controller.toggleGuarantee();
-                                          },
-                                        ),
-                                      )
-                                    ],
+                                  border: Border.all(
+                                    color: const Color.fromARGB(
+                                        255, 212, 212, 212),
+                                    width: 1,
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).canvasColor,
-                                    // color: Colors.red,
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(5),
-                                    ),
-                                    border: Border.all(
-                                      color: const Color.fromARGB(
-                                          255, 212, 212, 212),
-                                      width: 1,
-                                    ),
-                                  ),
-                                  child: Container(
-                                    constraints: BoxConstraints(minHeight: 50),
-                                    // color: Colors.red,
-                                    child: Obx(
-                                      () => Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Text(
-                                            'Color',
-                                            style: TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 110, 107, 107),
-                                              fontSize: 16,
-                                            ),
+                                child: Container(
+                                  constraints: BoxConstraints(minHeight: 50),
+                                  // color: Colors.red,
+                                  child: Obx(
+                                    () => Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text(
+                                          'Color',
+                                          style: TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 110, 107, 107),
+                                            fontSize: 16,
                                           ),
-                                          DropdownButton<String>(
-                                            value: modalType == ModalType.create
-                                                ? controller
-                                                    .selectedColorValue.value
-                                                    .toString()
-                                                : controller.productDetails
-                                                    .value.color?.id
-                                                    .toString(),
-                                            elevation: 16,
-                                            onChanged: (String? newValue) {
-                                              controller.changeSelectedColor(
-                                                int.parse(newValue!),
+                                        ),
+                                        DropdownButton<String>(
+                                          value: modalType == ModalType.create
+                                              ? controller.productDetails.value
+                                                  .color?.id
+                                                  .toString()
+                                              : controller.productDetails.value
+                                                  .color?.id
+                                                  .toString(),
+                                          elevation: 16,
+                                          onChanged: (String? newValue) {
+                                            controller.changeSelectedColor(
+                                              int.parse(newValue!),
+                                            );
+                                          },
+                                          items: controller.colors
+                                              .asMap()
+                                              .entries
+                                              .map(
+                                            (color) {
+                                              return DropdownMenuItem<String>(
+                                                value:
+                                                    color.value.id.toString(),
+                                                child: Container(
+                                                  height: 20,
+                                                  width: 20,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                      Radius.circular(10),
+                                                    ),
+                                                    color: HexColor.fromHex(
+                                                        color.value.hex),
+                                                  ),
+                                                ),
                                               );
                                             },
-                                            items: controller.colors
-                                                .asMap()
-                                                .entries
-                                                .map(
-                                              (color) {
-                                                return DropdownMenuItem<String>(
-                                                  value:
-                                                      color.value.id.toString(),
-                                                  child: Container(
-                                                    height: 20,
-                                                    width: 20,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                        Radius.circular(10),
-                                                      ),
-                                                      color: HexColor.fromHex(
-                                                          color.value.hex),
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            ).toList(),
-                                          ),
-                                        ],
-                                      ),
+                                          ).toList(),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                SizedBox(
-                                  width: double.infinity,
-                                  height: 55,
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      if (controller.formKey.currentState ==
-                                              null ||
-                                          !controller.formKey.currentState!
-                                              .validate()) return;
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              SizedBox(
+                                width: double.infinity,
+                                height: 55,
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    if (controller.formKey.currentState ==
+                                            null ||
+                                        !controller.formKey.currentState!
+                                            .validate()) return;
 
-                                      var res = modalType == ModalType.create
-                                          ? await controller
-                                              .addNewProductDetails()
-                                          : await controller.editPiceList();
-                                      if (res != null) {
-                                        // controller.getDatesList();
-                                        controller.getPriceListByDate(dateId);
-                                        Navigator.pop(context);
-                                      }
-                                    },
-                                    child: Obx(
-                                      //TODO: button kit with loading
-                                      () => utils.skeletonLoading.value
-                                          ? const SizedBox(
-                                              height: 30,
-                                              width: 30,
-                                              child: CircularProgressIndicator(
-                                                color: Colors.white,
-                                              ),
-                                            )
-                                          : const Text(
-                                              'Submit',
-                                              style: TextStyle(
-                                                  fontSize:
-                                                      18), //font size from theme
+                                    var res = modalType == ModalType.create
+                                        ? await controller
+                                            .addNewProductDetails()
+                                        : await controller.editPiceList();
+                                    if (res != null) {
+                                      // controller.getDatesList();
+                                      controller.getPriceListByDate(dateId);
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  child: Obx(
+                                    //TODO: button kit with loading
+                                    () => utils.skeletonLoading.value
+                                        ? const SizedBox(
+                                            height: 30,
+                                            width: 30,
+                                            child: CircularProgressIndicator(
+                                              color: Colors.white,
                                             ),
-                                    ),
+                                          )
+                                        : const Text(
+                                            'Submit',
+                                            style: TextStyle(
+                                                fontSize:
+                                                    18), //font size from theme
+                                          ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                              ],
-                            ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            );
-          });
+            ),
+          );
+        },
+      ).whenComplete(
+        () => controller.emptyNewProductDetailsObject(),
+      );
     }
 
     void deleteDate(BuildContext context, int dateId, int index) {

@@ -47,7 +47,6 @@ class DatesController extends GetxController {
   void changeSelectedColor(int colorValue) {
     ColorType selectedColor =
         colors.firstWhere((element) => element.id == colorValue);
-    print(selectedColor.toJson());
     selectedColorValue.value = colorValue;
     productDetails.value.colorId = colorValue;
     productDetails.value.color = selectedColor;
@@ -66,10 +65,6 @@ class DatesController extends GetxController {
     });
     // print(productDetails.values);
 // productDetails.val
-  }
-
-  selectColor(int colorValue) {
-    productDetails.value.colorId = colorValue;
   }
 
   setPriceListId(int id) {
@@ -139,7 +134,6 @@ class DatesController extends GetxController {
   }
 
   void toggleGuarantee() {
-    print('object');
     hasGuarantee.value = !hasGuarantee.value;
     productDetails.value.hasGuarantee = hasGuarantee.value;
     productDetails.refresh();
@@ -259,7 +253,6 @@ class DatesController extends GetxController {
       hasGuarantee: productDetails.value.hasGuarantee ?? true,
       priceListId: productDetails.value.priceListId!,
     );
-    // print(productDetails.value.colorId);
     var res = await addNewProductDetailsService(req);
     return res;
   }
