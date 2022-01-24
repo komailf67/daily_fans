@@ -728,9 +728,9 @@ class DatesList extends GetView<DatesController> {
           height: 30,
           child: ButtonTheme(
             // minWidth: 200.0,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.zero,
-                side: BorderSide(color: Colors.green)),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.zero,
+            ),
             child: RaisedButton(
                 elevation: 0.0,
                 color: Theme.of(context).primaryColor,
