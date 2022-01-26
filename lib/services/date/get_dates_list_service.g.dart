@@ -15,18 +15,21 @@ Map<String, dynamic> _$GetDatesListRequestToJson(
 
 GetDatesListResponse _$GetDatesListResponseFromJson(
         Map<String, dynamic> json) =>
-    GetDatesListResponse(
-      (json['data'] as List<dynamic>?)
-          ?.map((e) => DateModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    )
+    GetDatesListResponse()
       ..message = json['message'] as String?
-      ..code = json['code'] as int?;
+      ..success = json['success'] as bool?
+      ..error = json['error'] == null
+          ? null
+          : ErrorModel.fromJson(json['error'] as Map<String, dynamic>)
+      ..data = (json['data'] as List<dynamic>?)
+          ?.map((e) => DateModel.fromJson(e as Map<String, dynamic>))
+          .toList();
 
 Map<String, dynamic> _$GetDatesListResponseToJson(
         GetDatesListResponse instance) =>
     <String, dynamic>{
       'message': instance.message,
-      'code': instance.code,
+      'success': instance.success,
+      'error': instance.error,
       'data': instance.data,
     };

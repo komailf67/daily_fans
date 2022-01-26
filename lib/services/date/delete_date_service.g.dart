@@ -19,10 +19,14 @@ Map<String, dynamic> _$DeleteDateRequestToJson(DeleteDateRequest instance) =>
 DeleteDateResponse _$DeleteDateResponseFromJson(Map<String, dynamic> json) =>
     DeleteDateResponse()
       ..message = json['message'] as String?
-      ..code = json['code'] as int?;
+      ..success = json['success'] as bool?
+      ..error = json['error'] == null
+          ? null
+          : ErrorModel.fromJson(json['error'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$DeleteDateResponseToJson(DeleteDateResponse instance) =>
     <String, dynamic>{
       'message': instance.message,
-      'code': instance.code,
+      'success': instance.success,
+      'error': instance.error,
     };

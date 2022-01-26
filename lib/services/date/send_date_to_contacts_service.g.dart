@@ -22,11 +22,15 @@ SendDatesToContactResponse _$SendDatesToContactResponseFromJson(
         Map<String, dynamic> json) =>
     SendDatesToContactResponse()
       ..message = json['message'] as String?
-      ..code = json['code'] as int?;
+      ..success = json['success'] as bool?
+      ..error = json['error'] == null
+          ? null
+          : ErrorModel.fromJson(json['error'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$SendDatesToContactResponseToJson(
         SendDatesToContactResponse instance) =>
     <String, dynamic>{
       'message': instance.message,
-      'code': instance.code,
+      'success': instance.success,
+      'error': instance.error,
     };

@@ -37,14 +37,7 @@ class AddNewProductDetailsRequest {
 
 @JsonSerializable()
 class AddNewProductDetailsResponse extends MainResponse {
-  String? accessToken;
-  RefreshTokenModel? refreshToken;
-  UserModel? user;
-  OtpTokenModel? otpToken;
-
-  AddNewProductDetailsResponse(
-      this.accessToken, this.refreshToken, this.user, this.otpToken)
-      : super('', 0);
+  AddNewProductDetailsResponse() : super();
 
   Map<String, dynamic> toJson() => _$AddNewProductDetailsResponseToJson(this);
 
@@ -54,7 +47,6 @@ class AddNewProductDetailsResponse extends MainResponse {
 
 Future<AddNewProductDetailsResponse?> addNewProductDetailsService(
     AddNewProductDetailsRequest request) async {
-  print(request.toJson());
   var service = ServiceHelper(
       url: "/PriceListD/create",
       methodEnum: HttpMethodEnum.POST,

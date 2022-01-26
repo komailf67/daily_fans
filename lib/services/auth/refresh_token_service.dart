@@ -29,7 +29,7 @@ class RefreshTokenServiceResponse extends MainResponse {
     required this.refreshToken,
     required this.user,
     required this.accessToken,
-  }) : super('', 0);
+  }) : super();
 
   Map<String, dynamic> toJson() => _$RefreshTokenServiceResponseToJson(this);
 

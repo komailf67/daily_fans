@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:daily_fans/models/main_response_model.dart';
 import 'package:daily_fans/models/user/user_model.dart';
 import 'package:daily_fans/utils/base_url.dart';
@@ -23,9 +21,9 @@ class LoginServiceRequest {
 
 @JsonSerializable()
 class LoginServiceResponse extends MainResponse {
-  UserModel data;
+  UserModel? data;
 
-  LoginServiceResponse(this.data) : super('', 0);
+  LoginServiceResponse({this.data}) : super();
 
   Map<String, dynamic> toJson() => _$LoginServiceResponseToJson(this);
 

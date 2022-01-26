@@ -36,7 +36,7 @@ class EditProductDetailsRequest {
 
 @JsonSerializable()
 class EditProductDetailsResponse extends MainResponse {
-  EditProductDetailsResponse() : super('', 0);
+  EditProductDetailsResponse() : super();
 
   Map<String, dynamic> toJson() => _$EditProductDetailsResponseToJson(this);
 

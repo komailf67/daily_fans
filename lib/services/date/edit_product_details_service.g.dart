@@ -38,11 +38,15 @@ EditProductDetailsResponse _$EditProductDetailsResponseFromJson(
         Map<String, dynamic> json) =>
     EditProductDetailsResponse()
       ..message = json['message'] as String?
-      ..code = json['code'] as int?;
+      ..success = json['success'] as bool?
+      ..error = json['error'] == null
+          ? null
+          : ErrorModel.fromJson(json['error'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$EditProductDetailsResponseToJson(
         EditProductDetailsResponse instance) =>
     <String, dynamic>{
       'message': instance.message,
-      'code': instance.code,
+      'success': instance.success,
+      'error': instance.error,
     };

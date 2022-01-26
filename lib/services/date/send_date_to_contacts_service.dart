@@ -21,7 +21,7 @@ class SendDatesToContactRequest {
 
 @JsonSerializable()
 class SendDatesToContactResponse extends MainResponse {
-  SendDatesToContactResponse() : super('', 0);
+  SendDatesToContactResponse() : super();
 
   Map<String, dynamic> toJson() => _$SendDatesToContactResponseToJson(this);
 

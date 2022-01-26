@@ -42,9 +42,12 @@ class LoginController extends GetxController {
   // Private logics
   Future _makUserLogin(LoginServiceResponse res) async {
     // if (res.token == null || res.refreshToken == null) return;
-    if (res.data.token == null) return;
-    // await _setTokens(res.token!, res.refreshToken!.token);
-    await _setTokens(res.data.token!, res.data.token!);
+    if (res.data?.token == null) {
+      return;
+    } else {
+      await _setTokens(res.data!.token!, res.data!.token!);
+    }
+
     _setLoginStatusToOk();
   }
 

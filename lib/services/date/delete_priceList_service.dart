@@ -18,7 +18,7 @@ class DeletePriceListRequest {
 
 @JsonSerializable()
 class DeletePriceListResponse extends MainResponse {
-  DeletePriceListResponse() : super('', 0);
+  DeletePriceListResponse() : super();
 
   Map<String, dynamic> toJson() => _$DeletePriceListResponseToJson(this);
 

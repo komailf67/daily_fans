@@ -34,29 +34,17 @@ Map<String, dynamic> _$AddNewProductDetailsRequestToJson(
 
 AddNewProductDetailsResponse _$AddNewProductDetailsResponseFromJson(
         Map<String, dynamic> json) =>
-    AddNewProductDetailsResponse(
-      json['accessToken'] as String?,
-      json['refreshToken'] == null
-          ? null
-          : RefreshTokenModel.fromJson(
-              json['refreshToken'] as Map<String, dynamic>),
-      json['user'] == null
-          ? null
-          : UserModel.fromJson(json['user'] as Map<String, dynamic>),
-      json['otpToken'] == null
-          ? null
-          : OtpTokenModel.fromJson(json['otpToken'] as Map<String, dynamic>),
-    )
+    AddNewProductDetailsResponse()
       ..message = json['message'] as String?
-      ..code = json['code'] as int?;
+      ..success = json['success'] as bool?
+      ..error = json['error'] == null
+          ? null
+          : ErrorModel.fromJson(json['error'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$AddNewProductDetailsResponseToJson(
         AddNewProductDetailsResponse instance) =>
     <String, dynamic>{
       'message': instance.message,
-      'code': instance.code,
-      'accessToken': instance.accessToken,
-      'refreshToken': instance.refreshToken,
-      'user': instance.user,
-      'otpToken': instance.otpToken,
+      'success': instance.success,
+      'error': instance.error,
     };

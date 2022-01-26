@@ -22,7 +22,7 @@ class GetDatesListRequest {
 class GetDatesListResponse extends MainResponse {
   List<DateModel>? data;
 
-  GetDatesListResponse(this.data) : super('', 0);
+  GetDatesListResponse() : super();
 
   Map<String, dynamic> toJson() => _$GetDatesListResponseToJson(this);
 

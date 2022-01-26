@@ -27,13 +27,17 @@ RefreshTokenServiceResponse _$RefreshTokenServiceResponseFromJson(
       accessToken: json['accessToken'] as String,
     )
       ..message = json['message'] as String?
-      ..code = json['code'] as int?;
+      ..success = json['success'] as bool?
+      ..error = json['error'] == null
+          ? null
+          : ErrorModel.fromJson(json['error'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$RefreshTokenServiceResponseToJson(
         RefreshTokenServiceResponse instance) =>
     <String, dynamic>{
       'message': instance.message,
-      'code': instance.code,
+      'success': instance.success,
+      'error': instance.error,
       'refreshToken': instance.refreshToken,
       'user': instance.user,
       'accessToken': instance.accessToken,

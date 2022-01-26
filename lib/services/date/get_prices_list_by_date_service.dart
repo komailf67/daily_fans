@@ -26,7 +26,7 @@ class GetPricesListByDateServiceRequest {
 class GetPricesListByDateServiceResponse extends MainResponse {
   List<PriceModel>? data;
 
-  GetPricesListByDateServiceResponse(this.data) : super('', 0); //TODO: 0
+  GetPricesListByDateServiceResponse({this.data}) : super();
 
   Map<String, dynamic> toJson() =>
       _$GetPricesListByDateServiceResponseToJson(this);

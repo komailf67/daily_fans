@@ -17,17 +17,21 @@ Map<String, dynamic> _$GetColorsListRequestToJson(
 GetColorsListResponse _$GetColorsListResponseFromJson(
         Map<String, dynamic> json) =>
     GetColorsListResponse(
-      (json['data'] as List<dynamic>?)
+      data: (json['data'] as List<dynamic>?)
           ?.map((e) => ColorType.fromJson(e as Map<String, dynamic>))
           .toList(),
     )
       ..message = json['message'] as String?
-      ..code = json['code'] as int?;
+      ..success = json['success'] as bool?
+      ..error = json['error'] == null
+          ? null
+          : ErrorModel.fromJson(json['error'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$GetColorsListResponseToJson(
         GetColorsListResponse instance) =>
     <String, dynamic>{
       'message': instance.message,
-      'code': instance.code,
+      'success': instance.success,
+      'error': instance.error,
       'data': instance.data,
     };

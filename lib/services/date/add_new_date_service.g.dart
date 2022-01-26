@@ -21,10 +21,14 @@ Map<String, dynamic> _$AddNewDateRequestToJson(AddNewDateRequest instance) =>
 AddNewDateResponse _$AddNewDateResponseFromJson(Map<String, dynamic> json) =>
     AddNewDateResponse()
       ..message = json['message'] as String?
-      ..code = json['code'] as int?;
+      ..success = json['success'] as bool?
+      ..error = json['error'] == null
+          ? null
+          : ErrorModel.fromJson(json['error'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$AddNewDateResponseToJson(AddNewDateResponse instance) =>
     <String, dynamic>{
       'message': instance.message,
-      'code': instance.code,
+      'success': instance.success,
+      'error': instance.error,
     };

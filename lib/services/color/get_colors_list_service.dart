@@ -20,7 +20,7 @@ class GetColorsListRequest {
 class GetColorsListResponse extends MainResponse {
   List<ColorType>? data; //TODO note
 
-  GetColorsListResponse(this.data) : super('', 0);
+  GetColorsListResponse({this.data}) : super();
 
   Map<String, dynamic> toJson() => _$GetColorsListResponseToJson(this);
 

@@ -22,15 +22,21 @@ Map<String, dynamic> _$LoginServiceRequestToJson(
 LoginServiceResponse _$LoginServiceResponseFromJson(
         Map<String, dynamic> json) =>
     LoginServiceResponse(
-      UserModel.fromJson(json['data'] as Map<String, dynamic>),
+      data: json['data'] == null
+          ? null
+          : UserModel.fromJson(json['data'] as Map<String, dynamic>),
     )
       ..message = json['message'] as String?
-      ..code = json['code'] as int?;
+      ..success = json['success'] as bool?
+      ..error = json['error'] == null
+          ? null
+          : ErrorModel.fromJson(json['error'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$LoginServiceResponseToJson(
         LoginServiceResponse instance) =>
     <String, dynamic>{
       'message': instance.message,
-      'code': instance.code,
+      'success': instance.success,
+      'error': instance.error,
       'data': instance.data,
     };

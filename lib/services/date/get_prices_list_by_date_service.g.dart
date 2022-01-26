@@ -21,17 +21,21 @@ Map<String, dynamic> _$GetPricesListByDateServiceRequestToJson(
 GetPricesListByDateServiceResponse _$GetPricesListByDateServiceResponseFromJson(
         Map<String, dynamic> json) =>
     GetPricesListByDateServiceResponse(
-      (json['data'] as List<dynamic>?)
+      data: (json['data'] as List<dynamic>?)
           ?.map((e) => PriceModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     )
       ..message = json['message'] as String?
-      ..code = json['code'] as int?;
+      ..success = json['success'] as bool?
+      ..error = json['error'] == null
+          ? null
+          : ErrorModel.fromJson(json['error'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$GetPricesListByDateServiceResponseToJson(
         GetPricesListByDateServiceResponse instance) =>
     <String, dynamic>{
       'message': instance.message,
-      'code': instance.code,
+      'success': instance.success,
+      'error': instance.error,
       'data': instance.data,
     };

@@ -20,7 +20,7 @@ class AddNewDateRequest {
 
 @JsonSerializable()
 class AddNewDateResponse extends MainResponse {
-  AddNewDateResponse() : super('', 0);
+  AddNewDateResponse() : super();
 
   Map<String, dynamic> toJson() => _$AddNewDateResponseToJson(this);
 

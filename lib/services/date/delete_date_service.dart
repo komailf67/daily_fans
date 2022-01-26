@@ -18,7 +18,7 @@ class DeleteDateRequest {
 
 @JsonSerializable()
 class DeleteDateResponse extends MainResponse {
-  DeleteDateResponse() : super('', 0);
+  DeleteDateResponse() : super();
 
   Map<String, dynamic> toJson() => _$DeleteDateResponseToJson(this);
 
