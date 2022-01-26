@@ -149,6 +149,10 @@ class DatesController extends GetxController {
       dateTime: "$yearController/$monthController/$dayController",
     );
     var res = await addNewDateService(req);
+
+    if (res != null && res.success!) {
+      emptyTitleInAddNewDate();
+    }
     return res;
   }
 
@@ -178,25 +182,7 @@ class DatesController extends GetxController {
     if (res == null) return;
 
     for (var key in res!.data!) {
-      // Color color = Colors.white;
-      // switch (key.title) {
-      //   //TODO
-      //   case 'Black':
-      //     color = Colors.black;
-      //     break;
-      //   case 'Blue':
-      //     color = Colors.blue;
-      //     break;
-      //   case 'BlueBlack':
-      //     color = Color.fromARGB(255, 12, 50, 82);
-      //     break;
-      //   case 'White':
-      //     color = Colors.white;
-      //     break;
-      //   default:
-      // }
       colors.add(ColorType(id: key.id, title: key.title, hex: key.hex));
-      // dates.add(key);
     }
   }
 
@@ -236,6 +222,10 @@ class DatesController extends GetxController {
 
   void emptyPriceList() {
     prices.clear();
+  }
+
+  void emptyTitleInAddNewDate() {
+    titleController.clear();
   }
 
   void emptyNewProductDetailsObject() {

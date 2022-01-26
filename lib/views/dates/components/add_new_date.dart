@@ -191,7 +191,7 @@ class AddNewDate extends GetView<DatesController> {
                                     // await controller.login();
                                     // Get.toNamed(DatesView.route());
                                     var res = await controller.addNewDate();
-                                    if (res != null) {
+                                    if (res != null && res.success!) {
                                       controller.getDatesList();
                                       Navigator.pop(context);
                                     }

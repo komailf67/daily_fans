@@ -12,50 +12,66 @@ class DatesView extends GetView<DatesController> {
   static String route() => '/dates';
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Container(
-            margin: const EdgeInsets.only(top: 5),
-            child: Column(
-              children: [
-                Container(
-                  width: 100.0,
-                  height: 100.0,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: AssetImage('lib/assets/images/logo.jpg')),
+    return Obx(
+      () => Scaffold(
+        body: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              actions: <Widget>[
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Sort(),
+                      ProfileButton(),
+                    ],
                   ),
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Sort(),
-                    ProfileButton(),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Obx(
-                  () => controller.getDatesListLoading.isFalse &&
-                          controller.dates.isEmpty
-                      ? const NoData()
-                      : const DatesList(),
-                ),
-                // const DatesList(),
               ],
+              backgroundColor: Colors.white,
+              pinned: true,
+              snap: false,
+              floating: false,
+              expandedHeight: 160.0,
+              flexibleSpace: FlexibleSpaceBar(
+                centerTitle: false,
+                titlePadding: const EdgeInsets.only(left: 5.0, bottom: 5.0),
+                background: Image.asset('lib/assets/images/logo.jpg'),
+              ),
             ),
-          ),
+            MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              child: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return SafeArea(
+                      child: Center(
+                        child: SizedBox(
+                          child: Column(
+                            children: [
+                              Obx(
+                                () => controller.getDatesListLoading.isFalse &&
+                                        controller.dates.isEmpty
+                                    ? const NoData()
+                                    : const DatesList(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  childCount: 1,
+                ),
+              ),
+            ),
+          ],
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+        floatingActionButton: const AddNewDate(),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-      floatingActionButton: const AddNewDate(),
     );
   }
 }

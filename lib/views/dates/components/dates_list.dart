@@ -611,86 +611,80 @@ class DatesList extends GetView<DatesController> {
     }
 
     return SizedBox(
-      height: MediaQuery.of(context).size.height * .7, //TODO
-      child: ListView(
-        shrinkWrap: true,
+      child: Column(
         // padding: EdgeInsets.all(15.0),
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 5, right: 5),
             child: Column(
               children: [
-                Obx(() => SingleChildScrollView(
-                      child: Column(
-                        children: controller.dates.asMap().entries.map((date) {
-                          int idx = date.key + 1;
-                          return Slidable(
-                            child: Card(
-                              child: ListTile(
-                                onTap: () async {
-                                  controller.emptyPriceList();
-                                  bool res = await controller
-                                      .getPriceListByDate(date.value.id!);
-                                  if (res) {}
-                                  _showPriceListModal(date.value.id!);
-                                },
-                                title: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      date.value.dateTime.toString(),
-                                    ),
-                                    Text(
-                                      date.value.title.toString(),
-                                    ),
-                                  ],
-                                ),
-                                leading: Text(
-                                  idx.toString(),
-                                ),
-                                trailing: IconButton(
-                                  icon: controller.dates[date.key].loading
-                                      ? SizedBox(
-                                          height: 25,
-                                          width: 25,
-                                          child: CircularProgressIndicator(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            strokeWidth: 3,
-                                          ),
-                                        )
-                                      : Icon(
-                                          Icons.share,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                  color: Theme.of(context).primaryColor,
-                                  onPressed: () =>
-                                      controller.sendDatesToContacts(
-                                    date.value.id!,
-                                    date.key,
+                Obx(() => Column(
+                      children: controller.dates.asMap().entries.map((date) {
+                        int idx = date.key + 1;
+                        return Slidable(
+                          child: Card(
+                            child: ListTile(
+                              onTap: () async {
+                                controller.emptyPriceList();
+                                bool res = await controller
+                                    .getPriceListByDate(date.value.id!);
+                                if (res) {}
+                                _showPriceListModal(date.value.id!);
+                              },
+                              title: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    date.value.dateTime.toString(),
                                   ),
-                                  iconSize: 25,
+                                  Text(
+                                    date.value.title.toString(),
+                                  ),
+                                ],
+                              ),
+                              leading: Text(
+                                idx.toString(),
+                              ),
+                              trailing: IconButton(
+                                icon: controller.dates[date.key].loading
+                                    ? SizedBox(
+                                        height: 25,
+                                        width: 25,
+                                        child: CircularProgressIndicator(
+                                          color: Theme.of(context).primaryColor,
+                                          strokeWidth: 3,
+                                        ),
+                                      )
+                                    : Icon(
+                                        Icons.share,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                color: Theme.of(context).primaryColor,
+                                onPressed: () => controller.sendDatesToContacts(
+                                  date.value.id!,
+                                  date.key,
                                 ),
+                                iconSize: 25,
                               ),
                             ),
-                            key: ValueKey(date.key),
-                            endActionPane: ActionPane(
-                              motion: const ScrollMotion(),
-                              children: [
-                                SlidableAction(
-                                  onPressed: (context) => deleteDate(
-                                      context, date.value.id!, date.key),
-                                  backgroundColor: Colors.red,
-                                  foregroundColor: Colors.white,
-                                  label: 'Delete',
-                                ),
-                              ],
-                            ),
-                          );
-                          // return Text(date);
-                        }).toList(),
-                      ),
+                          ),
+                          key: ValueKey(date.key),
+                          endActionPane: ActionPane(
+                            motion: const ScrollMotion(),
+                            children: [
+                              SlidableAction(
+                                onPressed: (context) => deleteDate(
+                                    context, date.value.id!, date.key),
+                                backgroundColor: Colors.red,
+                                foregroundColor: Colors.white,
+                                label: 'Delete',
+                              ),
+                            ],
+                          ),
+                        );
+                        // return Text(date);
+                      }).toList(),
                     )),
               ],
             ),
