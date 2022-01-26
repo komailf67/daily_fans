@@ -12,66 +12,64 @@ class DatesView extends GetView<DatesController> {
   static String route() => '/dates';
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Scaffold(
-        body: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              actions: <Widget>[
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Sort(),
-                      ProfileButton(),
-                    ],
-                  ),
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            actions: <Widget>[
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Sort(),
+                    ProfileButton(),
+                  ],
                 ),
-              ],
-              backgroundColor: Colors.white,
-              pinned: true,
-              snap: false,
-              floating: false,
-              expandedHeight: 160.0,
-              flexibleSpace: FlexibleSpaceBar(
-                centerTitle: false,
-                titlePadding: const EdgeInsets.only(left: 5.0, bottom: 5.0),
-                background: Image.asset('lib/assets/images/logo.jpg'),
               ),
+            ],
+            backgroundColor: Colors.white,
+            pinned: true,
+            snap: false,
+            floating: false,
+            expandedHeight: 160.0,
+            flexibleSpace: FlexibleSpaceBar(
+              centerTitle: false,
+              titlePadding: const EdgeInsets.only(left: 5.0, bottom: 5.0),
+              background: Image.asset('lib/assets/images/logo.jpg'),
             ),
-            MediaQuery.removePadding(
-              context: context,
-              removeTop: true,
-              child: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return SafeArea(
-                      child: Center(
-                        child: SizedBox(
-                          child: Column(
-                            children: [
-                              Obx(
-                                () => controller.getDatesListLoading.isFalse &&
-                                        controller.dates.isEmpty
-                                    ? const NoData()
-                                    : const DatesList(),
-                              ),
-                            ],
-                          ),
+          ),
+          MediaQuery.removePadding(
+            context: context,
+            removeTop: true,
+            child: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return SafeArea(
+                    child: Center(
+                      child: SizedBox(
+                        child: Column(
+                          children: [
+                            Obx(
+                              () => controller.getDatesListLoading.isFalse &&
+                                      controller.dates.isEmpty
+                                  ? const NoData()
+                                  : const DatesList(),
+                            ),
+                          ],
                         ),
                       ),
-                    );
-                  },
-                  childCount: 1,
-                ),
+                    ),
+                  );
+                },
+                childCount: 1,
               ),
             ),
-          ],
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-        floatingActionButton: const AddNewDate(),
+          ),
+        ],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      floatingActionButton: const AddNewDate(),
     );
   }
 }
