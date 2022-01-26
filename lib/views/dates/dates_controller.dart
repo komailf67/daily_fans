@@ -146,7 +146,7 @@ class DatesController extends GetxController {
     var req = AddNewDateRequest(
       title: titleController.text,
       // dateTime: "14$year/${monthController.text}/${dayController.text}",
-      dateTime: "${yearController}/${monthController}/${dayController}",
+      dateTime: "$yearController/$monthController/$dayController",
     );
     var res = await addNewDateService(req);
     return res;
@@ -294,7 +294,16 @@ class DatesController extends GetxController {
       DeleteDateRequest req = DeleteDateRequest(dateId: dateId);
       DeleteDateResponse? res = await deleteDateService(req);
       if (res == null) return;
-      dates.removeAt(index);
+      if (res.success!) {
+        dates.removeAt(index);
+      } else {
+        //TODO handle all errors in a service
+        Get.snackbar(
+          "Error",
+          res.message!,
+          backgroundColor: Colors.red,
+        );
+      }
     } catch (e) {}
   }
 
