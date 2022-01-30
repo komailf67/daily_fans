@@ -1,6 +1,8 @@
 import 'package:daily_fans/bindings/initial_binding.dart';
 import 'package:daily_fans/middlewares/anti_auth_middleware.dart';
 import 'package:daily_fans/theme/deafult_theme.dart';
+import 'package:daily_fans/views/contacts/contacts_binding.dart';
+import 'package:daily_fans/views/contacts/contacts_view.dart';
 import 'package:daily_fans/views/dates/dates_binding.dart';
 import 'package:daily_fans/views/dates/dates_view.dart';
 import 'package:daily_fans/views/login/login_binding.dart';
@@ -53,6 +55,11 @@ class MyApp extends StatelessWidget {
           name: DatesView.route(),
           page: () => const DatesView(),
           binding: DatesBinding(),
+        ),
+        GetPage(
+          name: ContactsView.route(),
+          page: () => const ContactsView(),
+          binding: ContactsBinding(),
         ),
       ],
     );
